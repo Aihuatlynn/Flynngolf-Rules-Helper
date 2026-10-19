@@ -1,0 +1,20 @@
+{
+  "name": "golf-rules-helper",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Golf Rules Helper - offline study aid for the Rules of Golf (independent, unofficial)",
+  "scripts": {
+    "assets": "npx capacitor-assets generate --android --iconBackgroundColor \"#12284d\" --splashBackgroundColor \"#12284d\"",
+    "add:android": "npx cap add android",
+    "sync": "npx cap sync android",
+    "open": "npx cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/core": "^7.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^7.0.0"
+  }
+}

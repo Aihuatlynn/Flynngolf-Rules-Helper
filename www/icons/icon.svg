@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a4f8f"/><stop offset="1" stop-color="#12284d"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f6fb5"/><stop offset="1" stop-color="#1d4f8c"/></linearGradient>
+</defs>
+<rect width="512" height="512" fill="url(#g)"/>
+<g transform="translate(64 0) scale(.75)"><!-- open rulebook -->
+<path d="M96 318 Q176 292 256 322 Q336 292 416 318 L416 422 Q336 396 256 426 Q176 396 96 422 Z" fill="#f6f1e3"/>
+<path d="M256 322 L256 426" stroke="#c9bf9f" stroke-width="5"/>
+<path d="M96 318 Q176 292 256 322 L256 334 Q176 306 96 332 Z" fill="#e5dcc0"/>
+<path d="M416 318 Q336 292 256 322 L256 334 Q336 306 416 332 Z" fill="#e5dcc0"/>
+<g fill="none" stroke="#b8ad8a" stroke-width="6" stroke-linecap="round"><path d="M130 356 Q180 342 226 358"/><path d="M130 384 Q180 370 226 386"/><path d="M286 358 Q332 342 382 356"/><path d="M286 386 Q332 370 382 384"/></g>
+<!-- green mound, hole and flag -->
+<ellipse cx="256" cy="300" rx="126" ry="30" fill="url(#h)"/>
+<ellipse cx="256" cy="298" rx="30" ry="9" fill="#0b2a1c"/>
+<rect x="253" y="116" width="7" height="182" rx="3.5" fill="#f6f1e3"/>
+<path d="M260 118 L360 150 L260 184 Z" fill="#e0b13a"/>
+<!-- ball -->
+<circle cx="326" cy="288" r="22" fill="#fff"/>
+<g fill="#cfd6cf"><circle cx="318" cy="282" r="3"/><circle cx="330" cy="280" r="3"/><circle cx="324" cy="292" r="3"/><circle cx="336" cy="291" r="3"/><circle cx="314" cy="294" r="3"/></g>
+<ellipse cx="326" cy="311" rx="20" ry="4" fill="#0b2a1c" opacity=".35"/>
+</g>
+<text x="256" y="428" text-anchor="middle" font-family="Liberation Sans, Arial, sans-serif" font-weight="700" font-size="58" letter-spacing="6" fill="#f6f1e3">RULES</text>
+<text x="256" y="486" text-anchor="middle" font-family="Liberation Sans, Arial, sans-serif" font-weight="700" font-size="58" letter-spacing="6" fill="#e0b13a">HELPER</text>
+</svg>

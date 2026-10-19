@@ -1,0 +1,1063 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Golf Rules Helper</title>
+<meta name="apple-mobile-web-app-title" content="Golf Rules">
+<meta name="application-name" content="Golf Rules Helper">
+<meta name="theme-color" content="#1d3a6b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="description" content="Study and practice helper for the Rules of Golf: describe a situation or paste a question to see the likely ruling, Rule number, penalty and strokes. Works offline.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<style>
+:root{--bg:#f1f4ec;--panel:#fafbf6;--ink:#15251c;--muted:#5a6b60;--line:#d3dacb;--accent:#1d5c3e;--accent-ink:#fff;--accent-soft:#dfece1;--warn:#a85d00;--warn-soft:#fbead0;--bad:#b3261e;--bad-soft:#f9dedb;--good:#1d6b45;--good-soft:#d9efe1;
+--display:Georgia,"Times New Roman",serif;--body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1a14;--panel:#16251c;--ink:#e6efe6;--muted:#9db1a3;--line:#2a3d31;--accent:#5fbf8b;--accent-ink:#0b1f14;--accent-soft:#1d3427;--warn:#f0b35a;--warn-soft:#3a2a10;--bad:#ff8f86;--bad-soft:#3b1b18;--good:#6fd39a;--good-soft:#17321f}}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--body);padding:0 16px 48px;padding-bottom:calc(48px + env(safe-area-inset-bottom))}
+.wrap{max-width:820px;margin:0 auto}
+header{padding:calc(18px + env(safe-area-inset-top)) 0 8px}
+h1{font:600 26px/1.15 var(--display);margin:0 0 4px}
+.lead{color:var(--muted);margin:0 0 12px}
+h2{font:600 20px var(--display);margin:0 0 6px}h3{font:600 13px var(--body);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:14px 0 6px}
+.bar{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
+.seg{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel);max-width:100%}
+.seg button{flex:1 1 auto;border:0;background:transparent;color:var(--ink);padding:9px 13px;font:500 14px var(--body);cursor:pointer;min-height:40px}
+.seg button.on{background:var(--accent);color:var(--accent-ink)}
+.lab{font:500 11px var(--body);letter-spacing:.08em;color:var(--muted);text-transform:uppercase;margin:12px 0 2px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:12px 0}
+textarea{width:100%;min-height:150px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);padding:12px;font:15px/1.5 var(--body);resize:vertical}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.btn{display:inline-block;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);padding:10px 16px;border-radius:10px;font:600 14px var(--body);cursor:pointer;text-decoration:none;min-height:42px}
+.btn.ghost{background:transparent;color:var(--accent)}
+a.btn{background:transparent;color:var(--accent)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:8px 12px;font:14px var(--body);cursor:pointer;text-align:left}
+.chip:hover{border-color:var(--accent)}
+.badge{display:inline-block;font:600 12px var(--body);border-radius:999px;padding:3px 10px;background:var(--accent-soft);color:var(--accent)}
+.badge.high{background:var(--good-soft);color:var(--good)}.badge.med{background:var(--warn-soft);color:var(--warn)}.badge.low{background:var(--bad-soft);color:var(--bad)}.badge.fmt{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.main{border-width:2px;border-color:var(--accent)}
+.ans{font:600 24px/1.25 var(--display);margin:10px 0 2px}.ans.small{font-size:18px}
+.sub{color:var(--muted);margin-bottom:6px}
+.what{margin:8px 0}.why{color:var(--muted);font-size:14px}
+.tf{font:700 34px var(--display);margin:8px 0}.tf.t{color:var(--good)}.tf.f{color:var(--bad)}
+.opts{display:grid;gap:8px}.opt{display:flex;gap:10px;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.opt.yes{background:var(--good-soft);border-color:var(--good)}.opt .mk{font-weight:700;width:18px}.opt.yes .mk{color:var(--good)}.opt.no .mk{color:var(--bad)}
+.alts{display:grid;gap:8px}.alt{border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+ul.sc{margin:0;padding-left:18px}ul.sc li{margin:4px 0}
+.calc{display:flex;gap:10px;flex-wrap:wrap}.calc label{display:grid;gap:3px;font-size:13px;color:var(--muted)}
+.calc input{width:150px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:16px var(--body)}
+.cout{margin-top:10px;padding:10px;border-radius:10px;background:var(--accent-soft)}
+a.rl{color:var(--accent);font-weight:600}
+footer{color:var(--muted);font-size:13px;margin-top:18px}
+@media (max-width:520px){h1{font-size:23px}.ans{font-size:21px}}
+.grp{margin:6px 0}.grp summary{cursor:pointer;font:600 14px var(--body);padding:8px 0;list-style:none}.grp summary::before{content:'\25B8  ';color:var(--accent)}.grp[open] summary::before{content:'\25BE  '}.grp .chips{padding:4px 0 8px}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<h1>Golf Rules Helper</h1>
+<p class="lead">Describe a golf situation or paste a rules question. See the likely ruling, the Rule number, the penalty and the strokes, based on the 2023 Rules of Golf.</p>
+</header>
+<div class="lab">Format of play</div>
+<div class="bar"><div class="seg"><button data-fmt="auto" class="on">Auto</button><button data-fmt="sp">Stroke play</button><button data-fmt="mp">Match play</button></div></div>
+<div class="lab">Question type</div>
+<div class="bar"><div class="seg"><button data-sec="auto" class="on">Auto</button><button data-sec="A">A True/False</button><button data-sec="B">B Multiple choice</button><button data-sec="C">C Ruling + Rule</button><button data-sec="D">D Rule + strokes</button></div></div>
+<div class="card">
+<label class="lab" for="q" style="margin-top:0">Question (add the answer options on separate lines if you have them)</label>
+<textarea id="q" placeholder="Example: In stroke play, a player's ball lies in a bunker. The player removes a loose impediment and the ball moves. What is the ruling?"></textarea>
+<div class="row"><button class="btn" id="go">Get answer</button><button class="btn ghost" id="clr">Clear</button><span class="why">Ctrl or Cmd + Enter also works.</span></div>
+<div class="lab">Try a sample question</div>
+<div class="chips" id="samples"></div>
+</div>
+<div id="out"></div>
+<footer>A study aid that paraphrases the 2023 Rules of Golf (The R&amp;A). It is not the official text and can be wrong, especially for unusual cases and Local Rules. Check the linked rule page and the Official Guide before relying on an answer, This app is for learning and practice only. It is not affiliated with or endorsed by The R&amp;A, the USGA or any golf association, and it should not be used during a competition or any official assessment.</footer>
+</div>
+<script>
+/* ===== KNOWLEDGE BASE part 1: situations =====
+ p: 0 none | 1 one stroke | 2 general penalty | "dq" | "s" special (sp/mp text)
+ sn: SP penalty strokes as a number for the stroke calculator (when p is "s")
+*/
+var E=[
+/* ---- Tee and ball in play ---- */
+{id:"tee-outside",t:"Starting a hole from outside the teeing area",r:"6.1b",p:"s",sn:2,
+ sp:"General penalty (2 strokes). That stroke does not count. Correct it by playing from inside the teeing area; if not corrected before the next hole (or before returning the card on the last hole) the player is disqualified.",
+ mp:"No penalty. The opponent may promptly cancel the stroke, and then the player replays from inside the teeing area.",
+ k:"teed off outside teeing area in front of tee markers wrong tee markers wrong teeing area behind markers played from wrong tee",
+ a:"Stroke play: general penalty and replay. Match play: no penalty, but the opponent may cancel the stroke.",
+ w:"A stroke from outside the teeing area does not count in stroke play, so the replay is the next stroke after the 2 penalty strokes.",
+ s:["If it is match play and the opponent does not cancel promptly, the ball is in play and the player plays on.","If stroke play and the player does not correct before the next hole, disqualification."],
+ n:"Stroke play: tee off again from inside the teeing area. The outside stroke does not count, so the score after the replay is 3 (2 penalty strokes + 1 counted stroke).",
+ calc:"Stroke play: the outside stroke does not count. Penalty 2. The replay is the 1st counted stroke, so after the replay the score is 3."},
+{id:"tee-fall",t:"Teed ball falls off the tee before the stroke",r:"6.2b",alt:["6.2b(5)"],p:0,
+ k:"ball fell off tee knocked off tee ball came off the tee ball moved off the tee teed ball falls blown off the tee",
+ a:"No penalty. The ball is not yet in play; re-tee it. If the player strikes it while it is falling, the stroke counts and there is no penalty.",
+ w:"A ball that is teed in the teeing area is not in play until it is struck.",
+ s:["If the player makes a stroke at the ball after it has fallen or while falling, the stroke counts (no penalty).","Do not confuse with a ball already in play that is lifted in the teeing area (6.2b(6))."],
+ n:"Re-tee the ball anywhere in the teeing area, no penalty and no stroke counted unless it was struck.",
+ calc:"No penalty. A swing that misses a teed ball is a stroke; knocking the ball off with a practice swing is not."},
+{id:"tee-inplay",t:"Ball in play comes to rest in the teeing area (e.g. hits a tree and comes back)",r:"6.2b",alt:["6.2b(6)","11.1"],p:0,
+ k:"hits a tree comes back rests in teeing area ball comes back into teeing area re-tees picks up ball retee teeing area after stroke ball lies in teeing area lifted and re-teed",
+ a:"No penalty. After a stroke, a ball in play that lies in the teeing area may be lifted or moved without penalty, then played (or another ball played) from anywhere in the teeing area, from the ground or a tee.",
+ w:"The tree is an accidental deflection (11.1): no penalty. Re-teeing is allowed under 6.2b(6), not a wrong place. The first stroke counts.",
+ s:["If the ball comes to rest outside the teeing area, it is just played as it lies (no special relief).","If the player played the ball from a place that is not in the teeing area, 14.7a applies (general penalty)."],
+ n:"Play from anywhere in the teeing area. The next stroke is stroke 2; no penalty strokes.",
+ calc:"Stroke 1 = tee shot (counts). Re-tee, no penalty. Next stroke = stroke 2. Total penalties = 0."},
+{id:"wrongball",t:"Played a wrong ball",r:"6.3c",p:"s",sn:2,
+ sp:"General penalty (2 strokes). Strokes with the wrong ball do not count. Must correct by playing the right ball (as it lies or by taking relief) before the next hole starts, or before returning the card on the last hole, or be disqualified.",
+ mp:"Loss of hole for the first player to play a wrong ball. If the balls were swapped and it is not known who played first: no penalty, play on with the balls exchanged.",
+ k:"played a wrong ball wrong ball in match play wrong ball in stroke play wrong ball played someone else's ball partner's ball by mistake played another player's ball hit the wrong ball mistaken ball not my ball ball proves not to be their ball proves to be a wrong ball not their own ball wrong ball from the general area",
+ a:"Stroke play: 2 penalty strokes and play the right ball. Match play: loss of hole.",
+ w:"Exception: a wrong ball moving in water in a penalty area or temporary water is no penalty and the stroke does not count.",
+ s:["Wrong ball in water that was moving: no penalty, the stroke does not count (6.3c exception).","Stableford, maximum score or par/bogey: the uncorrected wrong ball gives zero points or loses that hole, not DQ (Rule 21)."],
+ n:"Stroke play: find and play your own ball as it lies, or take relief. The other player also replaces their ball if you moved it (6.3c(2)).",
+ calc:"Wrong-ball strokes do not count. Total = strokes before + 2 penalty + corrected strokes with the right ball."},
+{id:"substitute",t:"Substituting a ball when it is not allowed",r:"6.3b",p:1,
+ k:"substituted ball changed ball replaced with another ball swapped ball switched balls dropped another ball when replacing lifted ball replace new ball",
+ a:"One penalty stroke for making a stroke at an incorrectly substituted ball. The substituted ball becomes the ball in play.",
+ w:"A ball may be substituted when taking relief by dropping or when playing again from a previous spot, but not when the ball must be replaced.",
+ s:["If it is played from a wrong place as well, the general penalty applies instead of two penalties (1.3c(4) exception)."],
+ n:"Play out the hole with the substituted ball. Add one penalty stroke.",
+ calc:"Strokes played + 1 penalty."},
+{id:"turn",t:"Playing out of turn",r:"6.4",alt:["6.4a","6.4b"],p:"s",sn:0,
+ sp:"No penalty in stroke play (ready golf is allowed and encouraged). If two players agree to play out of turn to give one an advantage, each gets the general penalty.",
+ mp:"No penalty. The opponent may promptly cancel the stroke and make the player replay from the original spot.",
+ k:"out of turn played before opponent turn wrong order honour honor ready golf play first farthest away",
+ a:"No penalty in stroke play unless agreed to give an advantage. Match play: the opponent may cancel the stroke.",
+ w:"Foursomes are different: playing in the wrong order is a general penalty (22.3).",
+ s:["Agreed in stroke play to give one player an advantage: general penalty for each (2 strokes each)."],
+ n:"Stroke play: play on. Match play: opponent chooses to cancel or accept.",
+ calc:"Usually 0 penalty strokes."},
+/* ---- Lost, OB, provisional ---- */
+{id:"lost",t:"Lost ball or ball out of bounds (stroke and distance)",r:"18.2b",alt:["18.2","18.1","18.2a"],p:1,
+ k:"tee shot out of bounds tee shot is out of bounds ball out of bounds shot out of bounds lost ball out of bounds ob oob white stakes ball not found three minutes 3 minutes search stroke and distance hit it out of bounds drive out of bounds over the fence cannot find my ball",
+ a:"One penalty stroke. Replay from where the previous stroke was made (tee it up if that was the teeing area).",
+ w:"A ball is lost if not found within 3 minutes of starting the search. A ball is out of bounds only when all of it is outside the boundary edge.",
+ s:["If a provisional ball was already played, it is the replay: do not add a second penalty or count it twice.","If it is known or virtually certain that the ball is in a penalty area, use Rule 17 (not lost).","If the ball is found in bounds within 3 minutes, play it as it lies."],
+ n:"Return to the spot of the previous stroke and play again, adding one penalty stroke.",
+ calc:"Tee shot out of bounds: stroke 1 + 1 penalty. The replay is stroke 3."},
+{id:"oob-line",t:"Ball on or near the boundary line",r:"18.2a",p:0,
+ k:"ball on boundary line over white stake part of ball inside boundary edge touching the line stake out of bounds line",
+ a:"The ball is out of bounds only if ALL of it lies outside the boundary edge. If any part is within the boundary edge (even above it), it is in bounds, so no penalty.",
+ w:"Boundary stakes and fence posts themselves are out of bounds.",
+ s:["Whole ball outside the edge: out of bounds, stroke and distance (18.2b)."],
+ n:"Play the ball as it lies if any part is in bounds.",
+ calc:"No penalty if any part is in bounds."},
+{id:"provisional",t:"Provisional ball (announced and played)",r:"18.3",alt:["18.3a","18.3b","18.3c"],p:0,
+ k:"provisional ball announce provisional another ball playing again second ball original ball found abandoned provisional nearer the hole",
+ a:"A provisional must be announced as provisional (or clearly indicated) before the stroke. If not announced, the second ball is in play under stroke and distance.",
+ w:"If the original is found in bounds within 3 minutes (not in a penalty area), it must be played and the provisional abandoned. If the provisional is played from a spot nearer the hole than where the original probably is, the provisional becomes the ball in play.",
+ s:["Original lost or out of bounds: provisional is in play, add one penalty stroke (stroke and distance).","Original in or virtually certain to be in a penalty area: provisional is abandoned, take Rule 17 relief or play it as it lies.","Provisional not announced: ball in play under stroke and distance, original out of play."],
+ n:"Announce the word provisional before hitting. Search for 3 minutes. Then decide which ball is in play.",
+ calc:"Tee shot 1 (lost) + 1 penalty + provisional (stroke 3) + next (stroke 4)."},
+{id:"stroke-dist",t:"Stroke-and-distance relief at any time",r:"18.1",p:1,
+ k:"stroke and distance any time go back replay last stroke previous spot play again from where i hit",
+ a:"One penalty stroke. A player may always take stroke-and-distance relief and play from where the last stroke was made.",
+ w:"Once the replacement ball is in play the original is out of play even if found within 3 minutes.",
+ s:[],n:"Replay from the previous spot (tee, drop in relief area, or place on green).",calc:"Previous strokes + 1 penalty; next stroke follows."},
+/* ---- Search and identify ---- */
+{id:"search-move",t:"Ball accidentally moved while searching for it",r:"7.4",p:0,
+ k:"moved ball while searching kicked ball in rough stepped on ball searching accidentally moved ball looking for ball identify ball accidentally moved",
+ a:"No penalty. Replace the ball on its original spot (estimate it if unknown).",
+ w:"If the player moves the ball BEFORE starting the search, it is one penalty stroke (9.4b).",
+ s:["Moved deliberately, or before the search began: one penalty stroke (9.4b)."],
+ n:"Replace on the original spot and recreate the lie if it was covered by sand.",calc:"No penalty."},
+{id:"search-ident",t:"Lifting a ball to identify it",r:"7.3",p:1,
+ k:"lifted ball to identify it identify ball without marking cleaned ball while identifying lifted ball not reasonably necessary mark the spot identify",
+ a:"One penalty stroke if the spot is not marked first, if lifting was not reasonably necessary, or if the ball is cleaned more than needed (except on the putting green).",
+ w:"Marking before lifting is required. Lifting to identify is allowed only when needed, and the ball may be cleaned only as much as necessary to identify.",
+ s:["Lifted correctly (marked, necessary, not over-cleaned): no penalty."],
+ n:"Mark the spot, lift, identify without cleaning more than needed, then replace.",calc:"+1 penalty."},
+{id:"search-sand",t:"Sand moved while searching and lie not re-created",r:"7.1b",p:2,
+ k:"searching in sand lie recreated sand moved while searching covered ball in sand lie not recreated",
+ a:"If the ball is found covered by sand, the player must recreate the lie. Playing without recreating it is a general penalty.",
+ w:"Reasonable actions to find the ball are allowed, but the lie must be restored.",s:[],n:"Recreate the lie as nearly as possible, leaving a little of the ball visible.",calc:"General penalty if not recreated."},
+/* ---- Course as found ---- */
+{id:"improve",t:"Improving conditions (bending, breaking, pressing down, removing sand/dew)",r:"8.1a",alt:["8.1c"],p:2,
+ k:"bent a branch to swing bending branch behind ball bent branch improve lie stance swing area line of play bent branch broke a branch bent bush pressed down grass pressed down turf moved tee marker removed dew removed frost removed sand removed loose soil improved conditions fill a divot hole bending a branch",
+ a:"General penalty for improving the lie, stance, area of swing, line of play or relief area by actions such as moving, bending or breaking growing things, altering the ground, or removing sand, loose soil, dew or frost.",
+ w:"Penalty can be avoided by restoring the condition before the next stroke only for 8.1a(1) (bent or moved growing/attached objects) and 8.1a(2) (moving obstructions); not for ground changes.",
+ s:["Restored a merely bent branch before the stroke: no penalty (8.1c).","Replaced or pressed down a divot: general penalty, cannot be cured.","Removing a loose impediment or movable obstruction is not an improvement."],
+ n:"Do not improve conditions. If you did, restore if the Rules allow it before the stroke.",calc:"General penalty: 2 strokes (SP), loss of hole (MP)."},
+{id:"ground-club",t:"Lightly grounding the club behind the ball",r:"8.1b",p:0,
+ k:"grounded club lightly behind ball in grass addressing the ball grass touching club behind ball ground club in rough set feet firmly take stance",
+ a:"No penalty for lightly touching the grass behind the ball, firmly placing feet, or taking a stance with least intrusion. Pressing grass down would be 8.1a.",
+ w:"Not allowed in a bunker: touching sand behind the ball is 12.2b.",s:[],n:"Take the stance fairly, do not press down grass.",calc:"No penalty."},
+{id:"restore-others",t:"Restoring conditions worsened by others (e.g. footprint, animal)",r:"8.1d",p:0,
+ k:"footprint made by another player restore lie divot by another player ball rolled into someone else's footprint conditions worsened after ball came to rest",
+ a:"If the ball's conditions were worsened after it came to rest by someone else or an animal, they may be restored without penalty. Not if worsened by the player, caddie or natural forces.",
+ w:"Restoring beyond that is an improvement (8.1a).",s:[],n:"Restore as nearly as possible to the original.",calc:"No penalty."},
+/* ---- Ball at rest moved ---- */
+{id:"natural",t:"Ball at rest moved by natural forces (wind, water, gravity)",r:"9.3",p:0,
+ k:"wind blew my ball wind moved ball rolled by itself ball moved by natural forces gravity moved ball ball rolled downhill after it stopped moved on its own",
+ a:"No penalty. Play the ball from its new spot (do not replace it).",
+ w:"Exceptions: a ball replaced on the putting green that moves must be replaced; a ball put in play by dropping, placing or replacing that moves to another area or out of bounds must be replaced on its original spot.",
+ s:["Ball had been lifted and replaced on the green, then wind moved it: replace on the original spot, no penalty.","Dropped ball moves into another area of the course or out of bounds: replace."],
+ n:"Play from where it now rests.",calc:"No penalty."},
+{id:"player-moves",t:"Ball at rest lifted or moved by the player (e.g. practice swing)",r:"9.4b",alt:["9.4a"],p:1,
+ k:"practice swing knocked the ball practice swing moved the ball player moved ball practice swing hit ball moved by me accidentally knocked ball moved my ball lifted ball moved addressing ball moved ball by club touched ball ball moved after i addressed it",
+ a:"One penalty stroke. The ball must be replaced on its original spot.",
+ w:"No penalty in the 9.4b exceptions: moved while searching (7.4), accidental on the putting green, accidental while marking/lifting/replacing/removing a movable obstruction/taking relief, or lifted as the Rules allow.",
+ s:["On the putting green, accidental movement is no penalty (13.1d).","Playing it without replacing: wrong place, general penalty only (14.7a)."],
+ n:"Replace on the original spot and add one penalty stroke.",calc:"+1 penalty. The ball is replaced, strokes counted as before."},
+{id:"opp-moves",t:"Opponent moves or lifts the player's ball (match play)",r:"9.5b",p:1,
+ k:"opponent moved my ball opponent lifted ball opponent touched my ball match play opponent kicked ball",
+ a:"The opponent gets one penalty stroke and the ball is replaced. (Exceptions: concession, lifting at the player's request, accidental movement as in 9.4b.)",
+ w:"The penalty is the opponent's, not the player's.",s:[],n:"Replace on the original spot.",calc:"Opponent +1 on the hole."},
+{id:"outside",t:"Ball at rest moved by an outside influence (animal, spectator, other player)",r:"9.6",p:0,
+ k:"dog took my ball animal moved ball bird picked up ball spectator moved ball another player moved my ball outside influence moved ball fellow competitor moved ball",
+ a:"No penalty. Replace the ball on its original spot (estimate it if unknown).",
+ w:"In stroke play, another player is an outside influence.",s:[],n:"Replace on the original spot.",calc:"No penalty."},
+{id:"moved-doubt",t:"Doubt whether the ball moved",r:"9.2a",p:0,
+ k:"not sure if ball moved did ball move wobbled oscillated ball moved know or virtually certain not sure moved who moved",
+ a:"The ball is treated as moved only if it is known or virtually certain (about 95 percent) that it moved. A wobble that returns to its spot is not moved.",
+ w:"If it is known or virtually certain, determine the cause (9.2b).",s:[],n:"If not moved, play on.",calc:"No penalty."},
+{id:"moved-backswing",t:"Ball begins to move after the backswing has started",r:"9.1b",p:0,
+ k:"ball moved after backswing started ball moves during backswing started stroke ball moving after address backswing began",
+ a:"No replacing: play the stroke from where the ball stops. If the player caused the movement, check 9.4b penalty.",
+ w:"Only natural forces, not the player, give no penalty.",s:[],n:"Play from where it stops.",calc:"No penalty (unless caused by the player)."},
+{id:"lw",t:"Loose impediment removed and the ball moves",r:"15.1b",alt:["9.4b","12.2a","15.1"],p:1,
+ k:"loose impediment removed ball moves removes loose impediment behind ball ball moves leaf stone twig moved the ball removed a leaf and ball moved branch moved ball bunker loose impediment ball moved",
+ a:"Replace the ball on its original spot, one penalty stroke (9.4b), anywhere except the putting green or teeing area.",
+ w:"Loose impediments may be removed anywhere (even in a bunker or penalty area), but if the ball at rest moves while doing so the player is penalised. On the putting green or teeing area: no penalty.",
+ s:["Ball on the putting green: no penalty (13.1d).","Ball in the teeing area: no penalty (it can be lifted, 6.2b(6)).","In a bunker: one penalty stroke, replace and recreate the lie."],
+ n:"Replace the ball on its original spot, recreate the lie in sand, add one penalty stroke.",
+ calc:"+1 penalty stroke. The stroke made after replacing counts normally."},
+{id:"li-before-replace",t:"Removing a loose impediment before replacing a ball that was lifted",r:"15.1a",p:1,
+ k:"lifted at request of another player removed branch before replacing loose impediment would have moved ball ball lifted then removed loose impediment lift ball interfered removed branch before replacing against loose branch lifted removes branch before replacing",
+ a:"One penalty stroke (15.1a Exception 1): before replacing a ball lifted or moved anywhere except the putting green, the player must not deliberately remove a loose impediment that would likely have caused the ball to move.",
+ w:"The impediment does not have to be put back. A ball lifted at another player's request must be marked (14.1a / 15.3b), but the breaches before the next event incur only one penalty (1.3c(4)).",
+ s:["On the putting green: allowed, no penalty.","Impediment removed after the ball was replaced: that falls under 15.1b."],
+ n:"Replace the ball on the original spot and add one penalty stroke.",calc:"+1 penalty."},
+];
+
+/* ===== part 2: strokes, advice, bunkers, green ===== */
+E=E.concat([
+{id:"double-hit",t:"Accidentally hitting the ball more than once in one stroke",r:"10.1a",p:0,
+ k:"double hit hit the ball twice accidentally hit twice ball hit twice twice in one stroke struck ball twice",
+ a:"One stroke, no penalty.",w:"Hitting a ball deliberately more than once is not allowed as a fair stroke.",s:[],n:"Play on from where it stops.",calc:"Counts as one stroke."},
+{id:"anchor",t:"Anchoring the club",r:"10.1b",p:2,k:"anchor anchoring putter against body belly putter anchored club",
+ a:"General penalty.",w:"Not anchored if the forearm touches the body in a normal way.",s:[],n:"Take a stance without anchoring.",calc:"2 strokes (SP)."},
+{id:"straddle",t:"Standing across or on the line of play",r:"10.1c",p:2,k:"straddle line of play stand on the line of play across line of play stance across line croquet style",
+ a:"General penalty for deliberately standing on either side of or astride the line of play. Accidental or to avoid interference: no penalty.",w:"Applies to the line of play and extension behind.",s:["Accidentally standing on the line: no penalty."],n:"Re-take stance.",calc:"2 strokes (SP)."},
+{id:"moving-ball",t:"Playing a moving ball",r:"10.1d",p:2,k:"played moving ball hit moving ball struck moving ball ball still moving swung at moving ball",
+ a:"General penalty. Exceptions: backswing already started (9.1b), ball falling off tee (6.2b(5)), ball moving in water (penalty area or temporary water).",w:"A stroke at a moving ball counts.",s:[],n:"Play on; the stroke counts.",calc:"2 strokes added (SP)."},
+{id:"advice",t:"Asking for or giving advice",r:"10.2a",p:2,
+ k:"advice asked what club ask for advice what club did you hit asked caddie of another player gave advice told me which club tell me what to hit asked playing partner club advice from fellow competitor",
+ a:"General penalty for each of the person asking and the person giving. Allowed only from the player's own caddie (and partners in team forms).",
+ w:"Advice excludes public information: location of things on the course, the distance from one point to another, and the Rules.",
+ s:["Distance, location of the hole or hazard, or Rules information is public information: no penalty.","A statement mixing public information with a recommendation (such as it is 150, take a 7-iron) can be advice."],
+ n:"Do not ask other players about club selection or how to play.",calc:"2 strokes (SP) to each player involved."},
+{id:"distance-info",t:"Asking for the length of the hole or a distance (public information)",r:"10.2a",p:0,
+ k:"asks the length of the hole yardage book distance to the green asked how far how many yards length of hole 380 yards distance information partner has yardage book asks what the distance is asked distance",
+ a:"No penalty. Distance between two points (such as the length of the hole) is public information, not advice.",
+ w:"The Rule that governs asking another player is 10.2a. 4.3a would only matter for the player's own equipment (for example measuring elevation or recommending a club).",
+ s:["If the answer also recommends a club or how to play the shot, it becomes advice (10.2a, general penalty).","If the player uses their own device to measure slope or wind, 4.3a applies."],
+ n:"No action needed. Distance information is allowed.",calc:"0 penalty strokes."},
+{id:"caddie-behind",t:"Caddie standing behind the player on the line of play",r:"10.2b",alt:["10.2b(4)"],p:2,
+ k:"caddie stood behind me caddie behind the ball on the line caddie behind lining up putt caddie positioned on extension of line help with alignment caddie standing behind player lining up",
+ a:"General penalty if the player begins a stance and the caddie is deliberately positioned on or close to the extension of the line of play behind the ball.",
+ w:"No penalty if the player steps away and the caddie moves before a new stance, or if the player stands in a different place.",
+ s:["Player moves away, caddie leaves before the next stance begins: no penalty."],
+ n:"Caddie must move away before the player takes the stance.",calc:"2 strokes (SP) when breached."},
+{id:"align-aid",t:"Alignment aid placed on the ground; physical help; shielding",r:"10.2b",p:2,
+ k:"club laid down to aim alignment rod alignment stick object on ground to align marker on line shielded from sun umbrella over player wind shield physical help setting feet",
+ a:"General penalty. Placing an object to help aim or stance, getting physical help, or being shielded from sun, rain or wind during a stroke is not allowed.",
+ w:"Removing the object does not cure the breach once the stance was taken.",s:[],n:"Do not use aids.",calc:"2 strokes (SP)."},
+{id:"two-caddies",t:"Having more than one caddie",r:"10.3a",p:2,
+ k:"two caddies at the same time second caddie two caddies at once more than one caddie both caddies",
+ a:"General penalty for each hole where it occurs (between holes: applied to the next hole).",w:"Only one caddie at a time.",s:[],n:"Send one caddie away.",calc:"2 strokes per hole (SP)."},
+{id:"deflect",t:"Ball in motion accidentally hits a person, animal or object",r:"11.1a",p:0,
+ k:"ball hit person ball hit cart ball struck my bag ball hit a spectator ball deflected hit animal ball hit tree ball hit another player accidentally deflected accidentally hit fellow competitor ball hit flagstick",
+ a:"No penalty. Play the ball as it lies. (Certain deflections of a ball played from the putting green are replayed: check 11.1b.)",
+ w:"Accidental deflection is not penalised. Deliberate deflection is 11.2.",s:["SP: a ball played from the putting green that hits another ball at rest on the green: general penalty (stroke counts)."],
+ n:"Play from where the ball comes to rest.",calc:"0 penalty strokes."},
+{id:"hit-ball-green",t:"Putt hits another ball at rest on the putting green",r:"11.1a",p:"s",sn:2,
+ sp:"General penalty (2 strokes) if both balls were on the putting green before the stroke. The stroke counts and the other ball is replaced.",
+ mp:"No penalty.",
+ k:"putt hit another ball hit ball on green ball struck another ball on putting green putted into another ball on green",
+ a:"Stroke play: general penalty. Match play: no penalty.",w:"Mark and lift balls that may interfere (15.3).",s:[],n:"Replace the other ball on its original spot. Play the putt from where the ball stopped.",calc:"Stroke counts + 2 penalty strokes (SP)."},
+{id:"deliberate-stop",t:"Deliberately deflecting or stopping a moving ball",r:"11.2b",p:2,
+ k:"deliberately stopped ball deliberate deflect stopped ball with hand kicked moving ball deflect ball with club caught ball stop ball rolling",
+ a:"General penalty. Special relief applies on where to play next (11.2c).",w:"Exceptions apply if there is no reasonable chance the ball could otherwise be in a penalty area or to the player's benefit.",s:[],n:"Drop one club-length from the estimated stopping spot (or place on the green).",calc:"2 strokes (SP)."},
+{id:"li-moving",t:"Removing loose impediment or altering conditions to affect a moving ball",r:"11.3",p:2,
+ k:"removed loose impediment while ball moving replaced divot ball in motion removed obstruction ball moving put object down",
+ a:"General penalty for deliberately removing a loose impediment or movable obstruction or altering conditions to affect a ball in motion.",w:"Exception: removing the flagstick or attending it follows 13.2.",s:[],n:"Play on.",calc:"2 strokes (SP)."},
+/* ---- bunkers ---- */
+{id:"bunker-sand",t:"Touching sand in a bunker (practice swing, backswing, testing, behind or in front of the ball)",r:"12.2b",alt:["12.2b(1)"],p:2,
+ k:"grounded club in bunker grounding club in bunker club touched the sand before shot bunker touched sand practice swing in bunker touched the sand grounded club in bunker sand behind the ball tested the sand test the sand club touched sand backswing bunker touched sand with club touch sand in bunker testing the sand brushed the sand",
+ a:"General penalty for touching the sand: (1) to test it, (2) with the club in the area right in front of or behind the ball, (3) in a practice swing or in the backswing.",
+ w:"A practice swing that touches the sand anywhere in the bunker is a breach. Allowed: fair search, removing loose impediments or obstructions, leaning on a club, digging in feet, smoothing after the ball is out.",
+ s:["Practice swing without touching sand: no penalty.","Striking sand in frustration or throwing a club: allowed, but may be misconduct.","After the ball has left the bunker, smoothing is allowed."],
+ n:"Hit the shot without touching the sand first. 2 penalty strokes if breached.",calc:"Stroke 1 + 2 penalty before the next stroke if breached before it."},
+{id:"bunker-smooth",t:"Smoothing sand or striking sand in a bunker without breaching",r:"12.2b",alt:["12.2b(2)","12.2b(3)"],p:0,
+ k:"smoothed sand after playing out raked bunker after shot hit sand in frustration leaned on club in bunker dug in feet in bunker smoothing bunker",
+ a:"No penalty. Smoothing after the ball has left the bunker, digging in the feet, leaning on a club and hitting the sand in frustration (outside the stroke) are allowed (unless 8.1a improvement).",
+ w:"Do not improve the lie, stance or swing area before the stroke.",s:[],n:"Smooth after the ball is out.",calc:"0 penalty strokes."},
+{id:"partly-bunker",t:"Ball partly in a bunker and another area",r:"2.2c",alt:["12.1"],p:0,
+ k:"ball partly in bunker ball touching bunker and general area ball on lip of bunker ball touching penalty area and bunker ball on edge of bunker",
+ a:"A ball is in a bunker if any part touches sand inside the edge. If it touches more than one area, it is treated as in the area with priority: penalty area first, then bunker, then putting green.",
+ w:"The lip, wall or face at the edge is not part of the bunker.",s:[],n:"Play from where it lies, following the rules of the area it is treated as being in.",calc:"No penalty."},
+/* ---- putting green ---- */
+{id:"green-clean",t:"Marking, lifting and cleaning the ball on the putting green",r:"13.1b",p:0,
+ k:"lifted and cleaned on green cleaned my ball on the green mark and lift on green marker clean ball green mark lift replace green",
+ a:"No penalty if the ball is marked first. A ball lifted on the putting green may be cleaned.",w:"Lifting without marking is 14.1a (one penalty stroke).",s:[],n:"Mark, lift, clean, replace on the original spot.",calc:"0 penalty strokes."},
+{id:"green-touch-line",t:"Touching the line of putt, repairing damage on the putting green",r:"13.1c",alt:["13.1a"],p:0,
+ k:"touched line of putt touch the line repaired pitch mark repaired ball mark spike mark fixed pitch mark repair damage on green aeration holes touch line of play on green",
+ a:"No penalty. A player may touch the line of putt, and repair ball marks, spike marks, old hole plugs, animal damage and other damage by hand, foot or normal repair tool.",w:"Aeration holes and natural surface imperfections cannot be repaired. Going beyond repair (making a path) is 8.1a, general penalty.",s:[],n:"Repair without delay and without going beyond what is allowed.",calc:"0 penalty strokes."},
+{id:"green-marker",t:"Ball or ball-marker accidentally moved on the putting green",r:"13.1d",p:0,
+ k:"ball marker moved accidentally moved ball on green knocked marker moved my ball marker accidentally moved ball marker on putting green accidentally moved marker",
+ a:"No penalty. Replace the ball or marker on the original spot.",w:"Deliberately lifting/moving the ball is a 9.4b penalty.",s:[],n:"Replace on the original spot.",calc:"No penalty."},
+{id:"green-moved-wind",t:"Ball replaced on the putting green is then moved by wind",r:"9.3",alt:["13.1d"],p:0,
+ k:"wind blew my ball on the green after i marked and replaced it ball moved after replaced on green moved after replacing ball on green after marked and replaced it wind",
+ a:"No penalty. A ball that was lifted and replaced on the putting green and then moved by natural forces must be replaced on its original spot.",
+ w:"If the ball had NOT been lifted and replaced (it was simply at rest on the green), play it from the new spot.",s:["Not lifted before: play from the new spot."],n:"Replace on the original spot and putt.",calc:"No penalty."},
+{id:"green-test",t:"Testing the putting green surface",r:"13.1e",p:2,
+ k:"tested green rubbed the green rolled a ball to test green scuffed the green testing surface rolled ball between holes",
+ a:"General penalty for deliberately testing the green during a hole by rubbing it or rolling a ball.",w:"Allowed between holes on the green just completed or on a practice green.",s:[],n:"Do not test the surface.",calc:"2 strokes (SP)."},
+{id:"wrong-green",t:"Ball on a wrong putting green",r:"13.1f",p:0,
+ k:"ball on wrong green wrong putting green played from wrong green wrong green interference",
+ a:"Free relief is required: the player may not play from a wrong green. Take relief (nearest point of complete relief, one club-length, no nearer the hole).",w:"Playing from the wrong green is the general penalty.",s:["Played the stroke from the wrong green: general penalty (2 strokes in stroke play)."],n:"Drop within one club-length of the nearest point of complete relief.",calc:"Free relief, no penalty."},
+{id:"flagstick",t:"Ball hits the flagstick, attended flagstick, deflection",r:"13.2",alt:["13.2a","13.2b"],p:0,
+ k:"flagstick pin ball hit the flag putt hit the pin attended the pin flagstick attended deliberately moved flagstick flagstick removed hit attended flagstick",
+ a:"No penalty for hitting the flagstick, whether attended, removed or left in. Penalties apply to deliberate acts to affect the ball (13.2a(2), 13.2b: general penalty).",w:"Positioning the flagstick off-centre deliberately so the ball hits it is a general penalty.",s:[],n:"Play on.",calc:"No penalty."},
+{id:"flag-lean",t:"Ball resting against the flagstick",r:"13.2c",p:0,
+ k:"ball resting against flagstick leaning against pin ball rests on the flag ball leaning on flagstick resting against pin",
+ a:"If any part of the ball is below the surface of the putting green, the ball is holed once the flagstick is removed. If the flagstick is removed and the ball falls in, it is holed; if it stays, replace it on the lip.",w:"No penalty either way.",s:[],n:"Remove the flagstick carefully.",calc:"No penalty."},
+{id:"overhang",t:"Ball overhanging the hole",r:"13.3a",p:1,
+ k:"ball overhanging hole ball on the lip waited 10 seconds ball hanging on edge ball falls after waiting wait ten seconds overhung",
+ a:"The player gets a reasonable time to reach the hole plus up to 10 seconds. If it falls in during that time it is holed with the last stroke. If it falls after that and before being played, it is holed with the previous stroke plus one penalty stroke added.",
+ w:"Another player deliberately lifting an overhanging ball: SP general penalty.",s:["Ball falls within the waiting time: holed, no penalty."],n:"Wait the allowed time; do not wait longer.",calc:"Holed with previous stroke + 1 penalty if it falls after the wait."},
+/* ---- procedures ---- */
+{id:"no-mark",t:"Lifting a ball that must be replaced without marking its spot",r:"14.1a",p:1,
+ k:"lifted ball without marking it lifted without marking the spot lift ball without marking not marked ball before lifting failed to mark spot lifted ball didn't mark marker still in place played with marker in place no marker lifted ball",
+ a:"One penalty stroke for lifting a ball that must be replaced without marking the spot (or playing with the marker still there).",w:"No marking is needed when lifting for relief or replacing is not required.",s:[],n:"Replace on the estimated original spot.",calc:"+1 penalty."},
+{id:"clean-ball",t:"Cleaning a ball when not allowed",r:"14.1c",p:1,
+ k:"cleaned ball not allowed cleaned ball in general area lifted ball and cleaned it when not allowed wiped ball cleaned my ball",
+ a:"One penalty stroke and the ball must be replaced.",w:"Cleaning is allowed on the green, when taking relief, and when lifted to identify (only enough to identify).",s:[],n:"Replace the ball.",calc:"+1 penalty."},
+{id:"drop-wrong",t:"Dropping a ball the wrong way (shoulder height, above knee height, thrown)",r:"14.3b",alt:["14.3b(4)","14.5a"],p:1,
+ k:"drops a ball from shoulder height dropped from shoulder height and played it dropped above knee height dropped from shoulder dropped ball wrong way threw ball dropped ball touched body dropped in wrong way played ball dropped incorrectly wrong drop re-drop",
+ a:"The player must drop again (no limit, no penalty). If the player plays a wrongly dropped ball from the relief area: one penalty stroke. If played from outside the relief area: wrong place, general penalty.",
+ w:"A mistake in the drop can be corrected without penalty only before the ball is played (14.5a).",s:["Played from outside the relief area: general penalty (14.7a)."],n:"Re-drop from knee height straight down.",calc:"+1 penalty if played from the relief area."},
+{id:"drop-two",t:"Dropped ball keeps rolling outside the relief area",r:"14.3c",p:0,
+ k:"dropped ball rolled out of the relief area twice two drops outside area drop twice ball rolled nearer hole drop again second drop place the ball",
+ a:"Drop a second time. If the second drop also comes to rest outside, place the ball where the second dropped ball first touched the course. No penalty.",w:"If that spot also would not stay, place on the nearest spot (not nearer the hole).",s:[],n:"Place the ball at that spot.",calc:"No penalty."},
+{id:"wrong-place",t:"Playing from a wrong place",r:"14.7a",alt:["14.7b"],p:2,
+ k:"played from outside the relief area played from outside relief area played from wrong place wrong place played from the wrong spot dropped in wrong place played from outside relief area didn't replace ball played ball from wrong spot serious breach",
+ a:"General penalty. In stroke play, if it is a serious breach (significant advantage) the player must correct it by playing from the right place before the next hole (or before returning the card) or be disqualified.",
+ w:"If unsure whether a Rule requires something, a player may play two balls (20.1c(3)).",
+ s:["Not a serious breach: the score counts with 2 penalty strokes; no correction needed.","Serious breach not corrected: disqualification."],
+ n:"Stroke play: decide if serious; if so replay from the right place. Match play: loss of hole.",calc:"Stroke counts + 2 penalty strokes (if not serious)."},
+{id:"two-balls",t:"Not sure of the procedure: playing two balls",r:"20.1c",alt:["20.1c(3)"],p:0,
+ k:"two balls played two balls play two balls not sure of procedure play two balls unsure of ruling doubt what to do second ball committee ruling in doubt",
+ a:"Stroke play only: before making a stroke, announce that two balls are played, say which counts, and report to the Committee before returning the scorecard, or be disqualified.",w:"Not available in match play: make a claim in time.",s:[],n:"Play both balls to the end of the hole and report.",calc:"Score as ruled by the Committee."},
+{id:"replace-fail",t:"Replaced ball will not stay on its spot",r:"14.2e",p:0,
+ k:"ball will not stay when replaced replace twice ball rolls when replaced replaced ball moved ball will not stay at original spot",
+ a:"Try a second time. If it will not stay, place it at the nearest spot where it will stay (not nearer the hole, same area).",w:"No penalty.",s:[],n:"Place at the nearest spot.",calc:"No penalty."},
+/* ---- obstructions and relief ---- */
+{id:"movable-obs",t:"Movable obstruction (rake, bottle, towel, bag)",r:"15.2a",p:0,
+ k:"ball against rake bottle towel movable obstruction remove obstruction ball moves rake in bunker removed rake moved ball golf bag obstruction",
+ a:"Free removal anywhere. If the ball moves, replace it with no penalty.",w:"An obstruction that cannot be moved with reasonable effort is immovable (Rule 16.1).",s:[],n:"Remove and replace if moved.",calc:"No penalty."},
+{id:"ball-helping",t:"Ball helping or interfering with play (mark and lift)",r:"15.3",alt:["15.3a","15.3b"],p:1,
+ k:"ball helping interfering lifted at request ball backstop ball in the way ball interferes with stance lifted ball another player asked lift ball another player's ball helping",
+ a:"A ball that might interfere may be marked and lifted (without cleaning). If a player lifts without being asked or not required, or fails to mark, one penalty stroke. Agreeing to leave a ball to help: general penalty each.",w:"The ball lifted at another player's request must be marked.",s:[],n:"Mark, lift, replace on the original spot.",calc:"+1 penalty if lifted without marking."},
+{id:"gur",t:"Ground under repair, including a hole made in removing a tree stump",r:"16.1",alt:["16.1b","2.3","Definitions"],p:0,
+ k:"ground under repair gur white lines tree stump hole hole made in removing a tree stump greenkeeper hole stake removed hole made by maintenance staff pile of grass cuttings bird nest ground under repair marked",
+ a:"Free relief if it interferes with the lie, stance or swing. Ground under repair includes (even if not marked) holes made by the Committee or maintenance staff, such as a hole made in removing turf or a tree stump. A hole made by an animal is a separate abnormal condition (animal hole).",
+ w:"Not GUR: aeration holes; a tree stump itself is not automatically GUR.",
+ s:["General area: drop within one club-length of the nearest point of complete relief, not nearer the hole.","Putting green: place at the nearest point of complete relief."],
+ n:"Find the nearest point of complete relief, then drop in a relief area of one club-length.",calc:"No penalty."},
+{id:"animal-hole",t:"Hole made by an animal",r:"16.1",p:0,
+ k:"animal hole rabbit hole gopher hole burrow mole hole hole dug by an animal worm hole insect mound",
+ a:"Free relief for a hole dug by an animal (not a worm or insect). Includes loose dirt dug out and a trail leading to the hole.",w:"A footprint or hoof mark is not an animal hole.",s:[],n:"Take free relief; nearest point of complete relief, one club-length.",calc:"No penalty."},
+{id:"immovable",t:"Immovable obstruction: cart path, sprinkler head",r:"16.1",p:0,
+ k:"cart path ball on cart path sprinkler head drain immovable obstruction free drop path free relief obstruction interference ball on paved path",
+ a:"Free relief if it interferes with the lie, stance or swing (or the line on the green). Nearest point of complete relief, one club-length, not nearer the hole.",w:"No free relief from boundary objects or integral objects, and none inside a penalty area. Relief is not required if the interference is clearly unreasonable.",s:[],n:"Drop within one club-length of the nearest point of complete relief.",calc:"No penalty."},
+{id:"casual-water",t:"Temporary water (casual water, puddle)",r:"16.1",p:0,
+ k:"casual water puddle standing water temporary water wet fairway water on course water visible after taking stance",
+ a:"Free relief from temporary water outside a penalty area if visible before or after taking a stance without pressing down excessively.",w:"Wet or muddy ground alone is not temporary water; dew and frost are not.",s:[],n:"Take free relief in the general area (nearest point of complete relief).",calc:"No penalty."},
+{id:"acc-bunker",t:"Abnormal course condition in a bunker",r:"16.1c",p:0,
+ k:"ball in bunker puddle in bunker casual water in bunker bunker temporary water relief outside bunker animal hole in bunker",
+ a:"Free relief inside the bunker, or one penalty stroke to drop outside the bunker on the line back from the hole.",w:"Free relief inside must be a spot in the bunker; if there is none, maximum available relief.",s:[],n:"Choose inside (free) or outside (+1).",calc:"0 or +1 penalty."},
+{id:"acc-green",t:"Abnormal course condition on the putting green",r:"16.1d",p:0,
+ k:"on putting green interference ground under repair on green puddle on green line of putt abnormal condition on putting green",
+ a:"Free relief if it interferes with the ball, stance or line of play on the green: place the ball at the nearest point of complete relief.",w:"Applies on the green only for line-of-play interference.",s:[],n:"Place at the nearest point of complete relief.",calc:"No penalty."},
+{id:"danger-animal",t:"Dangerous animal condition",r:"16.2",p:0,
+ k:"snake bees fire ants alligator dangerous animal bees nest dangerous animal condition",
+ a:"Free relief from a dangerous animal that could cause serious physical injury (anywhere, including penalty areas).",w:"Not a cactus or other plant.",s:[],n:"Take free relief.",calc:"No penalty."},
+{id:"embedded",t:"Embedded ball (plugged in its own pitch mark)",r:"16.3",p:0,
+ k:"embedded ball plugged ball plugged in the fairway buried ball ball stuck in ground half buried ball in own pitch mark high approach pitch mark plugged",
+ a:"Free relief in the general area if the ball is embedded in its own pitch-mark from the previous stroke (part below ground level). Drop within one club-length of the spot directly behind where it was embedded.",w:"Not in a bunker or in sand not cut to fairway height or less.",s:["Rough sand not at fairway height: no free relief.","In a bunker: no relief."],n:"Mark, lift and drop within one club-length of the spot behind.",calc:"No penalty."},
+/* ---- penalty area, unplayable ---- */
+{id:"penalty-area",t:"Ball in a penalty area (red or yellow)",r:"17.1d",alt:["17.1","17.1b","17.2","17.3"],p:1,
+ k:"penalty area water hazard water lake pond creek stream red stakes yellow stakes red penalty area yellow penalty area ball in water ball in the lake ball in the water drop other side lateral relief",
+ a:"Play it as it lies without penalty (no free relief), or take penalty relief for one stroke: (1) stroke and distance, (2) back on the line keeping the point of entry between the hole and the ball, or (3) lateral relief within two club-lengths of the point of entry (red areas only).",
+ w:"Yellow: two options. Red: three options. Dropping on the opposite side of the penalty area is not a standard option (only by a Committee Local Rule).",
+ s:["Ball not found but known or virtually certain in the area: use the relief options. If not, it is lost (18.2).","Unplayable in a penalty area is not allowed (17.3)."],
+ n:"Pick an option, find the point where the ball last crossed the edge, drop in the relief area.",calc:"Stroke 1 into the water + 1 penalty; the next stroke is stroke 3."},
+{id:"unplayable",t:"Unplayable ball",r:"19.2",alt:["19.1","19.3"],p:1,
+ k:"declares ball unplayable declares their ball unplayable unplayable ball declare unplayable ball against tree root cannot swing ball in bush ball in tree stuck under a bush unplayable lie ball against a tree can't swing at it ball stuck ball in bad lie",
+ a:"The player alone decides. General area or putting green, one penalty stroke, any of: (a) stroke and distance, (b) back on the line, (c) lateral within two club-lengths, not nearer the hole.",
+ w:"In a bunker: same options inside the bunker for one stroke, or back on the line outside the bunker for two strokes. Not allowed in a penalty area (17.3).",
+ s:["In a bunker, back-on-the-line outside the bunker: 2 penalty strokes (19.3b).","In a penalty area: Rule 19 does not apply; use Rule 17."],
+ n:"Choose an option and drop in the relief area.",calc:"Stroke + 1 penalty (2 if back outside a bunker)."},
+{id:"no-play",t:"No play zone",r:"16.1f",alt:["17.1e"],p:0,
+ k:"no play zone ball in no play zone environmentally sensitive area no-play zone",
+ a:"Relief is required if the ball is in a no play zone (free in the general area).",w:"Playing from a no play zone is a breach.",s:[],n:"Take required relief.",calc:"No penalty."},
+]);
+
+/* ===== part 3: scoring, equipment, timing, forms, definitions ===== */
+E=E.concat([
+{id:"scorecard",t:"Scorecard: wrong score, unsigned, failure to hole out",r:"3.3b",alt:["3.3c","3.3a"],p:"dq",
+ k:"scorecard signed wrong score returned lower score lower than actual forgot to sign card did not sign return card higher score failed to hole out did not hole out",
+ a:"Stroke play: returning a lower score than actually taken on any hole, an unsigned card, or failing to hole out and not correcting it = disqualification. A higher score than actual stands.",
+ w:"If a penalty was unknown and omitted, the Committee adds it (no DQ) unless it was a disqualification penalty.",
+ s:["Higher score returned: stands.","Unknown penalty omitted: add it, no DQ (3.3b exception)."],
+ n:"Check each hole and sign before handing in the card.",calc:"Lower score returned: disqualification."},
+{id:"concede",t:"Conceding a putt, hole or match (match play)",r:"3.2b",p:0,
+ k:"concede conceded gimme concede a putt concede the hole withdrew concession concession final opponent concedes putt conceded putt picks up ball after concede",
+ a:"A concession of a stroke, hole or match is final and cannot be declined or withdrawn. Match play only. A caddie may not concede.",
+ w:"Not possible in stroke play.",s:[],n:"Treat as holed with the next stroke.",calc:"Counts as holed in one more stroke."},
+{id:"wrong-score-mp",t:"Giving the wrong number of strokes taken (match play)",r:"3.2d",p:2,
+ k:"told opponent wrong score wrong number of strokes tell opponent penalties failed to tell opponent about penalty gave wrong information to opponent",
+ a:"General penalty (loss of hole) for giving the wrong number of strokes taken or failing to tell about a penalty, unless corrected in time or no effect on the opponent's understanding of the result.",w:"Correct it before the opponent plays the next stroke or the result is agreed.",s:[],n:"Correct promptly.",calc:"Loss of hole in match play."},
+{id:"clubs",t:"More than 14 clubs",r:"4.1b",p:"s",sn:2,
+ sp:"2 penalty strokes for each hole at which a breach occurred, maximum 4 penalty strokes.",
+ mp:"Deduct one hole from the match score for each hole where a breach occurred, maximum 2 holes.",
+ k:"15 clubs 15th club too many clubs more than 14 clubs fourteen club limit extra club in bag 16 clubs carrying 15 clubs shared clubs",
+ a:"Stroke play: 2 strokes per hole, max 4. Match play: deduct a hole per breach hole, max 2 holes. Excess clubs must be put out of play at once (4.1c).",
+ w:"Using an excess club after putting it out of play is disqualification (4.1c).",s:["Found between holes: applies at the end of the hole just completed."],n:"Declare the club out of play immediately.",calc:"SP: +2 per hole, max 4 total."},
+{id:"club-damaged",t:"Club damaged or not conforming",r:"4.1a",alt:["4.1b"],p:"dq",
+ k:"damaged club broken club bent club cracked driver club broke snapped shaft damaged during round non conforming club altered club replaced damaged club thrown club",
+ a:"Making a stroke with a non-conforming club, or with one whose playing characteristics were deliberately changed during the round, is disqualification. A club damaged in normal play may still be used, repaired or replaced; a club damaged by the player's abuse may be used as is but not replaced.",w:"Check the clause: replacement and repair rules are in 4.1a/4.1b.",s:["Merely carrying a non-conforming club: no penalty (still counts towards 14)."],n:"Check the club before the round.",calc:"Non-conforming club stroke = DQ."},
+{id:"ball-conform",t:"Non-conforming ball or damaged ball",r:"4.2",alt:["4.2a","4.2b","4.2c"],p:"dq",
+ k:"non conforming ball cut ball cracked ball ball out of shape ball broke in pieces damaged ball swap damaged ball",
+ a:"A stroke at a non-conforming ball is disqualification. If the ball breaks into pieces, the stroke does not count (no penalty), replay. A cut or cracked ball may be replaced if the lift was reasonable and the ball was marked.",w:"Lifting without marking or cleaning is one penalty stroke.",s:[],n:"Mark before lifting to check.",calc:"Non-conforming ball stroke: DQ."},
+{id:"equipment",t:"Using equipment: distance-measuring device and other aids",r:"4.3a",p:2,
+ k:"rangefinder gps distance measuring device measuring slope elevation wind speed device recommended club used device for club recommendation smart watch music headphones audio swing aid training aid alignment aid used equipment unusual way",
+ a:"Distance or direction information is allowed with a distance-measuring device (unless a Local Rule bans it). Not allowed: measuring elevation, wind speed or recommending a club or line, music/audio to aid tempo, alignment aids and swing aids. First breach is the general penalty, second is disqualification.",w:"Allowed: weather forecast, temperature readings, pre-round information, plain gloves, grip aids, towels.",s:["Using a device for distance only: no penalty.","Second breach after an intervening event: disqualification."],n:"Use equipment only in an allowed way.",calc:"2 penalty strokes for the first breach (SP)."},
+{id:"late-start",t:"Late to the tee",r:"5.3a",p:"s",sn:2,
+ sp:"General penalty (2 strokes) applied to the first hole if up to 5 minutes late (ready to play). More than 5 minutes: disqualification.",
+ mp:"Loss of the first hole if up to 5 minutes late. More than 5 minutes: disqualification.",
+ k:"late to tee late start late for tee time arrived late missed tee time starting time late late starting time minutes late",
+ a:"Up to 5 minutes late: general penalty on the first hole. More: disqualification (unless the Committee finds exceptional circumstances).",w:"Early starts follow the same rule.",s:["Exceptional circumstances: the Committee may waive the penalty."],n:"Report to the starter.",calc:"2 strokes added to hole 1 (SP)."},
+{id:"practice",t:"Practice strokes during a round",r:"5.5",p:2,
+ k:"practice stroke practice putting on course practice chip practice shot during round hit practice ball practice putt practicing on the course practice on the way between holes",
+ a:"General penalty for a practice stroke while playing a hole. A practice swing is allowed. Between holes: practice putting or chipping on or near the green just completed or a practice green or next teeing area (not from a bunker, not delaying).",w:"A penalty between holes applies to the next hole.",s:["Practice swing (no ball): allowed."],n:"Do not make practice strokes with a ball.",calc:"2 strokes (SP)."},
+{id:"slow",t:"Slow play and unreasonable delay",r:"5.6a",p:1,
+ k:"slow play unreasonable delay pace of play delaying play took too long wasted time slow play penalty",
+ a:"Unreasonable delay: first breach is one penalty stroke, second breach is the general penalty, third breach is disqualification. Between holes it applies to the next hole.",w:"5.6b pace of play is a Committee matter and penalties come from a Local Rule or policy.",s:["Delay between holes: the penalty applies to the next hole."],n:"Keep up with the group.",calc:"+1 first breach."},
+{id:"lightning",t:"Stopping and resuming play, lightning",r:"5.7a",p:"dq",
+ k:"lightning stopped play suspension suspend play danger horn continued to play after suspension stopped play without permission",
+ a:"A player must stop at once when the Committee suspends play for danger. Failing to stop (unless justified) is disqualification. A player may stop on their own for lightning danger.",w:"Players resume when told.",s:[],n:"Mark the ball and stop.",calc:"Disqualification."},
+{id:"conduct",t:"Misconduct and breaking clubs in anger",r:"1.2a",p:"dq",
+ k:"threw club club throwing anger misconduct abusive language serious misconduct standards of conduct disqualification misconduct",
+ a:"Serious misconduct may be penalised by disqualification. Ordinary anger or throwing a club is not itself a Rule penalty, but the Committee may act under a code of conduct.",w:"Club abuse affects replacement of the club (4.1).",s:[],n:"Follow the standards of conduct.",calc:"DQ only for serious misconduct."},
+{id:"two-ball-agree",t:"Agreeing to ignore a Rule or penalty",r:"1.3b",p:"dq",
+ k:"agreed to ignore rule agree to waive a rule agreed not to apply penalty both players agreed to waive",
+ a:"Players must not agree to ignore a Rule or penalty they know applies: both are disqualified.",w:"Knowingly not applying a penalty is also DQ.",s:[],n:"Always apply Rules.",calc:"Disqualification."},
+{id:"multi-breach",t:"More than one breach of the same Rule or related breaches",r:"1.3c",alt:["1.3c(4)"],p:0,
+ k:"multiple breaches two breaches at once more than one penalty penalties combine two penalties multiple penalty strokes",
+ a:"Breaches between two events (completing a stroke, or becoming aware of a breach) incur only one penalty (the higher if different). Breaches on either side of an event are penalised separately. Relief penalty strokes are added on top.",w:"Exception: failing to replace a moved ball then playing from a wrong place is only the general penalty.",s:[],n:"Count events carefully.",calc:"One penalty per set of breaches between events."},
+{id:"stableford",t:"Stableford, maximum score and par/bogey",r:"21.1",alt:["21.2","21.3"],p:0,
+ k:"stableford maximum score par bogey stableford points stableford wrong ball stableford penalty",
+ a:"Breaches that normally disqualify in stroke play (failing to hole out, outside teeing area, wrong ball, serious wrong place, wrong order in foursomes) give zero points, maximum score or a lost hole for that hole only.",w:"Penalty strokes cannot take points below zero.",s:[],n:"Score by the format.",calc:"Format-specific."},
+{id:"foursomes",t:"Foursomes: playing in the wrong order",r:"22.3",p:2,
+ k:"foursomes alternate shot wrong order partner played wrong partner hit out of order foursomes tee off wrong partner",
+ a:"Stroke play: general penalty, the wrong-order stroke and any later strokes before correction do not count, replay from the spot. DQ if not corrected before the next hole. Match play: loss of hole.",w:"Partners alternate strokes and holes.",s:[],n:"Correct the order.",calc:"2 strokes + replay."},
+{id:"fourball",t:"Four-ball: partners and penalties",r:"23.9",p:0,
+ k:"four ball fourball partner penalty partner breach better ball partner helped four-ball partner",
+ a:"Most penalties apply only to the player who breached. The partner shares the penalty for a 14-club breach or a breach that helps the partner or (match play) hurts the opponent.",w:"A wrong ball penalises only the player.",s:[],n:"Check each partner.",calc:"Penalty applies to the breacher unless the partner is helped."},
+{id:"team-advice",t:"Team competitions: team advice giver",r:"24.4",p:2,
+ k:"team competition team captain coach team advice giver advice in team event",
+ a:"A team may name one advice giver who may give advice to team members. Giving advice by another is general penalty.",w:"The advice giver cannot be a caddie.",s:[],n:"Name one person.",calc:"2 strokes."},
+{id:"disability",t:"Players with disabilities",r:"25",alt:["25.4","25.2"],p:0,
+ k:"wheelchair disabled player blind player golfer with disability aide mobility device modified rules",
+ a:"Rule 25 modifies the Rules for certain disabilities (for example blind golfers, amputees, wheelchair users) and for aides and devices.",w:"The modification is the Rule; the standard Rule applies otherwise.",s:[],n:"Use Rule 25.",calc:"As modified."},
+{id:"ball-in-tree",t:"Ball in a tree: what to do",r:"19.2",alt:["18.2","19.1"],p:1,
+ k:"ball in a tree stuck in a tree ball in a tree stuck ball stuck in tree ball up a tree ball in the branches cannot reach ball",
+ a:"If the ball can be identified, the player may play it or declare it unplayable (one penalty stroke). If the ball cannot be found within 3 minutes it is lost (stroke and distance).",w:"A ball in a tree is in the area of the course on the ground below it.",s:["Ball not found: lost, stroke and distance (18.2b)."],n:"Declare unplayable or play stroke and distance.",calc:"+1 penalty."},
+{id:"stroke-def",t:"Stroke (definition)",r:"Definitions",alt:["Stroke"],p:0,
+ k:"stroke definition forward movement of the club a stroke is swing and miss missed the ball air shot whiff backswing practice swing counts as a stroke",
+ a:"A stroke is the forward movement of the club made to strike the ball. The backswing is not part of the stroke. A practice swing is not a stroke. A swing that misses the ball (air shot) is still a stroke if the player intended to strike.",
+ w:"A stroke is not made if the player deliberately stops the downswing before reaching the ball.",s:["Downswing deflected by an outside influence: still a stroke."],n:"Count a stroke when the player makes the forward swing intending to hit the ball.",calc:"Air shot = 1 stroke."},
+]);
+
+/* ===== part 4: True/False bank, definitions, clause titles ===== */
+var TF=[
+/* a: true/false of the statement as worded in v[0]; v = alternative wordings */
+{v:["Ground under repair does not include a hole made in removing a tree stump.","A hole made by a greenkeeper in removing a tree stump is not ground under repair."],a:false,r:"Definitions (Ground Under Repair)",
+ why:"Ground under repair includes holes made by the Committee or maintenance staff in maintaining the course, such as a hole made in removing turf or a tree stump, even if not marked. (The stump itself is not automatically GUR.)"},
+{v:["A hole made in removing a tree stump is ground under repair.","A hole made by a greenkeeper removing a stake is ground under repair even if it is not marked."],a:true,r:"Definitions (Ground Under Repair)",why:"Holes made by maintenance staff in setting up or maintaining the course are GUR even when unmarked."},
+{v:["A tree stump is always ground under repair.","A tree stump itself is automatically ground under repair."],a:false,r:"Definitions (Ground Under Repair)",why:"A tree stump is not automatically GUR unless cut up or piled for removal; the hole left by removing it is GUR."},
+{v:["A stroke includes the backward and forward movement of the club made to strike the ball.","A stroke is the backward and forward movement of the club."],a:false,r:"Definitions (Stroke)",why:"A stroke is only the forward movement of the club made to strike the ball. The backswing is not part of it."},
+{v:["A stroke is the forward movement of the club made to strike the ball."],a:true,r:"Definitions (Stroke)",why:"That is the definition of a stroke."},
+{v:["A practice swing counts as a stroke.","A practice swing is a stroke."],a:false,r:"Definitions (Stroke) / 5.5",why:"A practice swing with no intent to strike a ball is not a stroke."},
+{v:["A swing and miss at the ball is not a stroke.","An air shot is not counted as a stroke."],a:false,r:"Definitions (Stroke)",why:"A swing at the ball that misses is a stroke if the player intended to strike it."},
+{v:["Aeration holes are ground under repair."],a:false,r:"Definitions (Ground Under Repair)",why:"Aeration holes are specifically excluded."},
+{v:["Sand and loose soil are loose impediments.","Sand is a loose impediment.","Loose soil is a loose impediment."],a:false,r:"Definitions (Loose Impediment)",why:"Sand, loose soil, dew, frost and water are not loose impediments."},
+{v:["Dew and frost are loose impediments."],a:false,r:"Definitions (Loose Impediment)",why:"Dew and frost are neither loose impediments nor temporary water."},
+{v:["Snow and natural ice may be treated as either loose impediments or temporary water at the player's choice."],a:true,r:"Definitions (Loose Impediment)",why:"Snow and natural ice are either, at the player's option."},
+{v:["A player may remove loose impediments in a bunker before the stroke.","Loose impediments may be removed from a bunker."],a:true,r:"12.2a",why:"Loose impediments may be removed anywhere, including in a bunker and penalty area."},
+{v:["Touching the sand with a club right behind the ball during the backswing in a bunker has no penalty.","A player may touch the sand with the club behind the ball in a bunker."],a:false,r:"12.2b(1)",why:"Touching sand right behind or in front of the ball, in a practice swing, in the backswing or to test it is the general penalty."},
+{v:["A player may smooth the sand in a bunker after the ball has left it.","Smoothing a bunker after playing out is allowed."],a:true,r:"12.2b",why:"Smoothing after the stroke (or after relief outside) is allowed."},
+{v:["Digging in the feet in a bunker is penalised.","Digging in the feet in a bunker is a breach."],a:false,r:"12.2b",why:"Firmly placing the feet is allowed unless it improves conditions in other ways."},
+{v:["Giving the distance to another player is advice.","Telling another player the distance to the hole is a breach.","Giving the distance to the green is advice."],a:false,r:"Definitions (Advice) / 10.2a",why:"Public information such as distance and the location of things is not advice."},
+{v:["A player may ask another player's caddie for advice.","Asking a caddie other than your own for advice is allowed."],a:false,r:"10.2a",why:"A player may ask only their own caddie (or partner in team forms)."},
+{v:["A player may have two caddies at once.","A player may use more than one caddie at the same time.","A player may have two caddies at the same time."],a:false,r:"10.3a",why:"One caddie at a time; two caddies is the general penalty for each hole."},
+{v:["A ball is lost if it is not found within 3 minutes of beginning the search.","A ball is lost if not found within three minutes."],a:true,r:"18.2a",why:"Three minutes from starting the search."},
+{v:["A ball is out of bounds if any part of it is outside the boundary edge.","A ball is out of bounds if part of it is out of bounds."],a:false,r:"18.2a",why:"All of the ball must be outside the boundary edge."},
+{v:["Stroke-and-distance relief costs one penalty stroke.","The penalty for a ball out of bounds is one penalty stroke."],a:true,r:"18.1 / 18.2b",why:"One penalty stroke."},
+{v:["A provisional ball may be announced as another ball or playing again.","A provisional ball does not need to be announced."],a:false,r:"18.3b",why:"The player must announce it as a provisional (or clearly indicate that) before playing it."},
+{v:["A provisional ball is abandoned if the original ball is found in bounds within three minutes outside a penalty area.","A provisional ball must be abandoned if the original ball is found within 3 minutes."],a:true,r:"18.3c",why:"Play the original as it lies; the provisional is abandoned."},
+{v:["Only the player can decide a ball is unplayable, anywhere except in a penalty area.","A player may declare a ball unplayable anywhere on the course except in a penalty area."],a:true,r:"19.1",why:"Only the player decides; not in a penalty area."},
+{v:["A player may declare a ball unplayable in a penalty area.","Unplayable-ball relief is available in a penalty area.","A player may take unplayable ball relief in a penalty area."],a:false,r:"17.3 / 19.1",why:"Rule 19 does not apply in a penalty area; use Rule 17."},
+{v:["Lateral relief for an unplayable ball in the general area is two club-lengths for one penalty stroke.","Lateral relief for an unplayable ball is within two club-lengths."],a:true,r:"19.2c",why:"Two club-lengths, not nearer the hole, one stroke."},
+{v:["Back-on-the-line relief outside a bunker for an unplayable ball in the bunker costs two penalty strokes.","Unplayable ball in bunker with relief outside the bunker costs two penalty strokes."],a:true,r:"19.3b",why:"Two penalty strokes."},
+{v:["A red penalty area gives a lateral relief option; a yellow one does not.","Lateral relief is available from a red penalty area but not from a yellow penalty area."],a:true,r:"17.1d(3)",why:"Red: three options; yellow: two."},
+{v:["A yellow penalty area allows lateral relief.","Lateral relief is available from a yellow penalty area."],a:false,r:"17.1d",why:"Lateral relief is only for red penalty areas."},
+{v:["A player gets free relief from an embedded ball in a bunker.","Free relief from an embedded ball is available in a bunker."],a:false,r:"16.3",why:"Embedded ball relief is general area only."},
+{v:["Free relief from an abnormal course condition in the general area is within one club-length of the nearest point of complete relief, not nearer the hole.","The relief area for an abnormal course condition is one club-length from the nearest point of complete relief."],a:true,r:"16.1b",why:"One club-length, not nearer the hole."},
+{v:["Mere distraction from an abnormal course condition is interference.","A player gets relief if the condition merely distracts."],a:false,r:"16.1a",why:"Interference means the condition touches the ball or interferes with stance or swing area; distraction alone does not count."},
+{v:["There is free relief from boundary objects and integral objects.","A player gets free relief from a boundary fence."],a:false,r:"2.3",why:"No free relief from boundary or integral objects."},
+{v:["A ball that touches both a penalty area and a bunker is treated as in the penalty area.","A ball touching both a penalty area and a bunker is in the penalty area."],a:true,r:"2.2c",why:"Priority: penalty area, bunker, putting green."},
+{v:["Playing a wrong ball in stroke play is the general penalty and the stroke does not count.","Playing a wrong ball in stroke play is two penalty strokes."],a:true,r:"6.3c",why:"2 penalty strokes, must correct."},
+{v:["Playing a wrong ball in match play loses the hole.","A player who plays a wrong ball in match play loses the hole."],a:true,r:"6.3c",why:"Loss of hole (to the first player to play a wrong ball)."},
+{v:["In stroke play, playing from outside the teeing area costs two strokes and must be corrected.","Playing from outside the teeing area in stroke play is a general penalty."],a:true,r:"6.1b",why:"Two penalty strokes; correct or DQ."},
+{v:["In match play, playing from outside the teeing area costs the hole.","In match play, starting outside the teeing area is loss of hole."],a:false,r:"6.1b",why:"No penalty; the opponent may cancel the stroke."},
+{v:["A ball teed in the teeing area is in play before it is struck.","A teed ball is in play before the stroke."],a:false,r:"6.2b(5) / Definitions",why:"The ball is not in play until the stroke is made."},
+{v:["Playing out of turn in stroke play is penalised.","Playing out of turn is a penalty in stroke play."],a:false,r:"6.4b",why:"No penalty unless players agree to give one an advantage."},
+{v:["Playing from a wrong place is the general penalty.","Playing from a wrong place carries the general penalty."],a:true,r:"14.7a",why:"General penalty."},
+{v:["Failing to mark the ball before lifting it for replacement is one penalty stroke.","Lifting a ball without marking its spot is one penalty stroke."],a:true,r:"14.1a",why:"One penalty stroke."},
+{v:["A dropped ball must be dropped from knee height straight down.","A ball must be dropped from knee height."],a:true,r:"14.3b",why:"Knee height, falling straight, without touching the body or equipment."},
+{v:["A ball that accidentally hits the player after a stroke is penalised.","If a ball accidentally hits the player, there is a penalty."],a:false,r:"11.1",why:"No penalty; play the ball as it lies."},
+{v:["Deliberately stopping a moving ball is the general penalty.","Deliberately deflecting a moving ball is a general penalty."],a:true,r:"11.2b",why:"General penalty."},
+{v:["Accidentally moving a ball or ball-marker on the putting green is penalised.","A player gets a penalty for accidentally moving the ball on the putting green."],a:false,r:"13.1d",why:"No penalty; replace it."},
+{v:["A player may touch the line of putt on the putting green.","Touching the line of putt is allowed."],a:true,r:"13.1a",why:"Allowed; do not improve beyond repair."},
+{v:["Rubbing the green to test it during a hole is a general penalty.","Rolling a ball to test the green is a general penalty."],a:true,r:"13.1e",why:"Deliberately testing the green is the general penalty."},
+{v:["An overhanging ball gets a reasonable time to reach the hole plus ten seconds.","A ball overhanging the hole may wait 10 seconds."],a:true,r:"13.3a",why:"Reasonable time plus 10 seconds."},
+{v:["Hitting an unattended flagstick left in the hole is a penalty.","A player is penalised for hitting the flagstick left in the hole."],a:false,r:"13.2",why:"No penalty."},
+{v:["A player may start a round with a maximum of 14 clubs.","A player may carry no more than 14 clubs."],a:true,r:"4.1b",why:"Max 14; 2 strokes per hole, max 4, in stroke play."},
+{v:["A distance-measuring device may be used to measure elevation.","A player may use a rangefinder to measure slope."],a:false,r:"4.3a",why:"Elevation is not allowed unless a Local Rule allows; distance is."},
+{v:["A distance-measuring device may be used for distance information.","A rangefinder may be used to measure distance.","A player may use a rangefinder to measure distance."],a:true,r:"4.3a",why:"Allowed unless a Local Rule prohibits it."},
+{v:["A practice swing with no intent to hit a ball is allowed.","A practice swing is allowed during a round."],a:true,r:"5.5",why:"A practice swing is not a practice stroke."},
+{v:["Starting up to five minutes late is disqualification.","A player who is 4 minutes late is disqualified."],a:false,r:"5.3a",why:"Up to 5 minutes late is the general penalty on the first hole."},
+{v:["Moving a ball accidentally during a search is penalised.","A player gets a penalty for accidentally moving the ball while searching."],a:false,r:"7.4",why:"No penalty; replace it."},
+{v:["Moving a ball before a search has begun is no penalty.","A ball moved before the search begins is not penalised."],a:false,r:"9.4b",why:"One penalty stroke."},
+{v:["A player may repair a ball mark on the putting green.","Pitch marks may be repaired on the putting green."],a:true,r:"13.1c",why:"Allowed."},
+{v:["A player may repair aeration holes on the putting green.","Aeration holes may be repaired."],a:false,r:"13.1c",why:"Natural surface imperfections and aeration holes may not be repaired."},
+{v:["A hole made by an animal is an abnormal course condition.","A rabbit hole gives free relief."],a:true,r:"16.1",why:"Animal holes give free relief (not insects or worms)."},
+{v:["A hole made by a worm gives free relief.","A hole dug by a worm or insect is an animal hole."],a:false,r:"Definitions (Animal Hole)",why:"Holes dug by loose-impediment animals are excluded."},
+{v:["There is free relief from a cactus under the dangerous animal condition.","A cactus is a dangerous animal condition."],a:false,r:"16.2",why:"Not a cactus; only animals."},
+{v:["A player may stand out of bounds to play a ball in bounds.","Standing out of bounds to play a ball is allowed."],a:true,r:"2.1",why:"No penalty."},
+{v:["A concession in match play can be withdrawn.","A conceded putt may be declined."],a:false,r:"3.2b",why:"A concession is final."},
+{v:["A caddie may concede a hole for the player.","A caddie can concede the match."],a:false,r:"10.3b",why:"A caddie may not concede; only the player."},
+{v:["A player may play two balls in match play when unsure of a procedure.","Two balls may be played in match play when in doubt."],a:false,r:"20.1c",why:"Only in stroke play."},
+{v:["An unsigned scorecard in stroke play is disqualification.","Failing to sign the scorecard leads to disqualification."],a:true,r:"3.3b",why:"Disqualification."},
+{v:["A scorecard returned with a higher score than actually taken stands.","A higher score on a scorecard stands."],a:true,r:"3.3b",why:"The higher score stands."},
+{v:["A player may smooth footprints in a bunker before the stroke.","Smoothing sand before the stroke is allowed."],a:false,r:"8.1a / 12.2b",why:"Improving the lie, stance or swing area is the general penalty."},
+{v:["A loose impediment that is attached is a loose impediment.","Attached or growing items are loose impediments."],a:false,r:"Definitions (Loose Impediment)",why:"Attached, growing, solidly embedded or sticking to the ball is not loose."},
+{v:["A ball is embedded if it is in its own pitch-mark.","An embedded ball is in its own pitch mark with part below the surface."],a:true,r:"16.3",why:"Embedded: in its own pitch-mark from the previous stroke with part below ground level."},
+{v:["The teeing area is two club-lengths deep.","The teeing area is a rectangle two club-lengths deep."],a:true,r:"Definitions (Teeing Area)",why:"Two club-lengths deep from the front edge between markers."},
+{v:["The general penalty is two strokes in stroke play and loss of hole in match play.","The general penalty is loss of hole in match play and two strokes in stroke play."],a:true,r:"Definitions (General Penalty)",why:"Yes."},
+{v:["A penalty stroke is a stroke played.","Penalty strokes count as strokes played."],a:false,r:"Definitions",why:"A penalty stroke is added to the score but is not a stroke played."},
+];
+TF.push({v:["A player may carry 15 clubs.","A player may carry more than 14 clubs in the bag."],a:false,r:"4.1b",why:"The limit is 14 clubs. Carrying more is a breach: 2 penalty strokes per hole (max 4) in stroke play."});
+TF.push({v:["A player may ask their opponent which club they used.","A player may ask another player what club they hit."],a:false,r:"10.2a",why:"Asking for advice from anyone other than your own caddie is the general penalty. (Asking what club someone used is a question about their play, not public information.)"});
+TF.push({v:["A player's caddie may give advice to the player.","A caddie may give advice to the player."],a:true,r:"10.2a",why:"A player may ask for and receive advice from their own caddie."});
+TF.push({v:["Asking another player for advice is a breach of the Rules.","Asking an opponent for advice is a general penalty."],a:true,r:"10.2a",why:"Advice may be exchanged only with a caddie (or partner in team forms): general penalty for each of the two players."});
+TF.push({v:["Touching sand behind the ball with the club in a bunker before the stroke has no penalty.","Touching the sand right behind the ball in a bunker is not a breach."],a:false,r:"12.2b(1)",why:"Touching sand right behind or in front of the ball, in a practice swing, in the backswing or to test it is the general penalty."});
+var DEFS=[
+["Abnormal course condition","Animal hole, ground under repair, immovable obstruction, temporary water. Not: dangerous animal, wrong green, no play zone, cactus.","16.1"],
+["Animal hole","Hole dug by an animal (not worms, insects). Includes loose dirt dug out and a trail leading to the hole.","16.1"],
+["Ground under repair","Marked by the Committee, or holes made by staff in setting up/maintaining the course (e.g. removing turf or a tree stump), piles for removal, some animal habitats. Not aeration holes.","16.1"],
+["Temporary water","Visible accumulation on the surface outside a penalty area before or after a stance without pressing down. Not wet ground, dew or frost.","16.1"],
+["Loose impediment","Unattached natural objects: stones, leaves, branches, sticks, dead animals, worms/insects. Not sand, loose soil, dew, frost, water. Snow/natural ice at the player's option.","15.1"],
+["Obstruction","Artificial objects except integral objects and boundary objects; movable if it can be moved with reasonable effort.","15.2 / 16.1"],
+["Integral object / Boundary object","Treated as immovable; NO free relief.","2.3"],
+["Embedded","In its own pitch-mark from the previous stroke with part below ground level; free relief in the general area only.","16.3"],
+["Outside influence","Any person other than player, caddie, partner, opponent; any animal; any object including another ball in motion. Not natural forces.","9.6"],
+["Stroke","Forward movement of the club made to strike the ball. Not the backswing; not a practice swing.","Definitions"],
+["Ball in play","In play once stroked from the teeing area; stays in play until holed, lifted, lost, out of bounds or substituted.","6.1 / 6.2"],
+["Lost ball","Not found within 3 minutes after the search starts.","18.2a"],
+["Out of bounds","All of the ball outside the boundary edge.","18.2a"],
+["Wrong ball","Any ball other than your ball in play, provisional or second ball. Includes your own lost or lifted ball.","6.3c"],
+["Serious breach","Wrong place with significant advantage; must correct or DQ in stroke play.","14.7b"],
+["Advice","Verbal comment or action intended to influence club choice, stroke or how to play. Not public information (distance, location of things, Rules).","10.2"],
+["Caddie","Person who carries, transports or handles clubs or gives advice. One at a time.","10.3"],
+["General penalty","Loss of hole in match play; two penalty strokes in stroke play.","1.3"],
+["Relief area","The area where a ball must be dropped or placed (one or two club-lengths from a reference point).","14.3"],
+["Nearest point of complete relief","Estimated point nearest the original spot, not nearer the hole, where there is no interference.","16.1"],
+["Club-length","Length of your longest club other than a putter among the clubs in your bag.","Definitions"],
+["Teeing area","Rectangle two club-lengths deep between tee markers.","6.2"],
+["Putting green","Specially prepared area of the hole being played, or area defined by the Committee.","2.2"],
+["Bunker","Prepared sand area; excludes the lip, wall or face of the edge, and natural sand.","12.1"],
+["Penalty area","Yellow: 2 relief options; red: 3 (adds lateral relief). Unmarked treated as red.","17.1"],
+["Provisional ball","Another ball played in case the original may be lost outside a penalty area or out of bounds; must be announced.","18.3"],
+["Drop","Release from knee height, falling straight down without touching body or equipment.","14.3"],
+["Replace","Set down by hand intending it to be in play (from marked spot).","14.2"],
+["Known or virtually certain","Conclusive evidence, or about 95 percent likelihood.","9.2a"],
+["Moved","Leaves its spot and comes to rest elsewhere, visible to the naked eye; a wobble that returns is not moved.","9.2a"],
+["Holed","Ball at rest in the hole after a stroke with the whole ball below the green surface.","13.2c"],
+["Substitute","Changing the ball you are playing a hole with.","6.3b"],
+["Practice swing vs practice stroke","Practice swing without intent to hit a ball is fine; a practice stroke at a ball during a hole is a general penalty.","5.5"],
+["Equipment","Anything used, worn, held or carried by the player or caddie (rakes only while carried).","Definitions"],
+];
+var CL={ /* clause/rule titles used when checking answer options */
+"1":"Playing by the Rules, conduct, penalties","1.1":"Playing the course as found","1.2":"Standards of conduct","1.2a":"Standards of player conduct","1.3":"Playing by the Rules","1.3a":"What the Rules are (Rules, definitions)","1.3b":"Applying the Rules; agreeing to ignore Rules","1.3c":"Penalties; multiple breaches","1.3c(4)":"Multiple breaches",
+"2":"The Course","2.1":"Out of bounds","2.2":"Defined areas","2.2c":"Ball in more than one area","2.3":"Objects and conditions that interfere (boundary/integral)","2.4":"No play zones",
+"3":"The Competition","3.2":"Match play","3.2b":"Conceding","3.2d":"Informing opponent of strokes taken","3.3":"Stroke play scoring","3.3b":"Scorecard","3.3c":"Failure to hole out",
+"4":"The Player's Equipment","4.1":"Clubs","4.1a":"Conforming/damaged clubs","4.1b":"14-club limit","4.2":"The ball","4.3":"Use of equipment","4.3a":"Distance/direction devices and equipment use",
+"5":"Playing the Round","5.1":"Meaning of a round","5.2":"Practice before round","5.3a":"When to start the round","5.4":"Playing in groups","5.5":"Practice during a round","5.6":"Delay and pace of play","5.6a":"Unreasonable delay","5.7":"Stopping play",
+"6":"Playing a Hole","6.1":"Starting a hole","6.1b":"Playing from the teeing area","6.2":"Teeing area","6.2b":"Teeing the ball","6.3":"The ball used","6.3a":"Ball to be played","6.3b":"Substituting","6.3c":"Wrong ball","6.4":"Order of play","6.4a":"Order of play in match play","6.4b":"Order of play in stroke play",
+"7":"Ball search","7.1":"How to search fairly","7.1b":"Sand moved in search","7.2":"How to identify","7.3":"Lifting to identify","7.4":"Ball accidentally moved during search",
+"8":"Course played as found","8.1":"Actions that improve conditions","8.1a":"Prohibited actions","8.1b":"Permitted actions","8.1c":"Avoiding penalty by restoring","8.1d":"Restoring worsened conditions",
+"9":"Ball at rest moved","9.1":"Ball played as it lies","9.1b":"Ball moves during backswing","9.2":"Deciding if ball moved","9.2a":"Whether a ball moved","9.3":"Moved by natural forces","9.4":"Ball lifted or moved by player","9.4a":"Replacing the ball","9.4b":"Penalty for lifting or moving","9.5":"Ball moved by opponent","9.5b":"Opponent's penalty","9.6":"Moved by outside influence",
+"10":"Stroke, advice, caddies","10.1":"Making a stroke","10.1a":"Fair stroke","10.1b":"Anchoring","10.1c":"Standing across line","10.1d":"Playing moving ball","10.2":"Advice and help","10.2a":"Advice","10.2b":"Other help","10.3":"Caddies","10.3a":"One caddie","10.3b":"Caddie's actions","10.3c":"Player responsible for caddie",
+"11":"Ball in motion hits something","11.1":"Accidental deflection","11.1a":"Deflected","11.1b":"Where to play","11.2":"Deliberate deflection","11.2b":"Penalty","11.3":"Altering conditions for moving ball",
+"12":"Bunkers","12.1":"When ball is in a bunker","12.2":"Playing from a bunker","12.2a":"Loose impediments in a bunker","12.2b":"Touching sand","12.3":"Relief in bunker",
+"13":"Putting greens","13.1":"Actions on the green","13.1a":"Touching line","13.1b":"Marking, lifting, cleaning","13.1c":"Repairing damage","13.1d":"Ball or marker moved","13.1e":"Testing surface","13.1f":"Wrong green","13.2":"Flagstick","13.2a":"Flagstick options","13.2b":"Flagstick attended","13.2c":"Ball against flagstick","13.3":"Overhanging ball","13.3a":"Time to reach hole",
+"14":"Procedures","14.1":"Marking and lifting","14.1a":"Marking","14.1b":"Who lifts","14.1c":"Cleaning","14.2":"Replacing","14.2b":"Who replaces","14.2e":"Ball stays","14.3":"Dropping","14.3b":"How to drop","14.3c":"Relief area","14.5":"Correcting mistakes","14.5a":"Before playing","14.7":"Wrong place","14.7a":"Penalty wrong place","14.7b":"Serious breach",
+"15":"Loose impediments and obstructions","15.1":"Loose impediments","15.1a":"Removing loose impediments","15.1b":"Ball moves removing impediment","15.2":"Movable obstructions","15.2a":"Relief from movable obstruction","15.3":"Ball helping/interfering","15.3a":"Ball helping","15.3b":"Ball interfering",
+"16":"Relief situations","16.1":"Abnormal course conditions","16.1a":"Interference","16.1b":"General area relief","16.1c":"Bunker relief","16.1d":"Green relief","16.1f":"No play zone","16.2":"Dangerous animal","16.3":"Embedded ball","16.4":"Lifting to check",
+"17":"Penalty areas","17.1":"Relief options","17.1d":"Penalty relief options","17.2":"Ball played from penalty area","17.3":"No other relief",
+"18":"Lost, out of bounds, provisional","18.1":"Stroke and distance","18.2":"Lost or OB","18.2a":"When lost/OB","18.2b":"Penalty","18.3":"Provisional ball","18.3b":"Announce","18.3c":"Status",
+"19":"Unplayable ball","19.1":"Player decides","19.2":"Relief options","19.3":"In a bunker",
+"20":"Resolving issues","20.1":"Resolving","20.1c":"Two balls",
+"21":"Stableford, max score, par/bogey","22":"Foursomes","22.3":"Wrong order","23":"Four-ball","23.9":"Penalties","24":"Team competitions","24.4":"Team advice","25":"Disabilities",
+"Definitions":"Defined terms"
+};
+
+/* ===== engine: tokenising, ranking, option parsing ===== */
+var STOP={};("a an the i my me is are was were be been to of in on at for and or it its that this with by as so if do does did can could should would will am have has had what how when where which who there then than but not no you your we our they their he she his her from into after before while about just up get got want like really very some any one ve don doesnt dont cant cannot fix slice hook fade draw next question select choose correct option options following ruling rule number answer please ask does their them being then also may must than who whose whom shall during stroke strok strokes play playing played plays".split(" ")).forEach(function(w){STOP[w]=1;});
+/* keep key negations out of the stop list for A, handled separately */
+function stem(w){
+  w=w.toLowerCase().replace(/[^a-z0-9]/g,"");
+  if(w.length>4&&/ies$/.test(w)) w=w.replace(/ies$/,"y");
+  else if(w.length>4&&/(sses)$/.test(w)) w=w.replace(/es$/,"");
+  else if(w.length>3&&/s$/.test(w)&&!/ss$/.test(w)) w=w.replace(/s$/,"");
+  if(w.length>5&&/ing$/.test(w)) w=w.replace(/ing$/,"");
+  else if(w.length>4&&/ed$/.test(w)) w=w.replace(/ed$/,"");
+  if(w.length>4&&/e$/.test(w)) w=w.replace(/e$/,"");
+  return w;
+}
+var SYN={oob:"out bound boundary",ob:"out bound boundary",gur:"ground under repair",trap:"bunker",sandtrap:"bunker",pin:"flagstick",flag:"flagstick",gimme:"concede",conceded:"concede",tee:"tee",yardage:"distance",yard:"distance",rangefinder:"distance device",gps:"distance device",lie:"lie",casual:"temporary water",plugged:"embedded",buried:"embedded",pond:"water penalty area",lake:"water penalty area",creek:"water penalty area",stream:"water penalty area",ditch:"water penalty area",sprinkler:"obstruction",drain:"obstruction",cart:"obstruction",towel:"obstruction",rake:"obstruction",stone:"loose impediment",leaf:"loose impediment",twig:"loose impediment",stick:"loose impediment",pebble:"loose impediment",divot:"divot",gopher:"animal hole",rabbit:"animal hole",burrow:"animal hole",whiff:"stroke miss",dq:"disqualification",disqualified:"disqualification",dropped:"drop",lifted:"lift",picked:"lift",pickup:"lift"};
+function tokList(text){
+  var raw=String(text||"").toLowerCase().replace(/['’]s\b/g,"").split(/[^a-z0-9]+/).filter(Boolean),out=[];
+  raw.forEach(function(w){
+    if(STOP[w]||w.length<2) return;
+    var s=stem(w); if(!s||STOP[s]) return;
+    out.push(s);
+    var ex=SYN[w]||SYN[s];
+    if(ex) ex.split(" ").forEach(function(x){var t=stem(x); if(t&&!STOP[t]&&t!==s) out.push(t);});
+  });
+  return out;
+}
+function uniq(a){var o={},r=[];a.forEach(function(x){if(!o[x]){o[x]=1;r.push(x);}});return r;}
+function bigrams(l){var r=[];for(var i=0;i<l.length-1;i++) r.push(l[i]+"_"+l[i+1]);return r;}
+
+var IDX=null,TFX=null,IDF={};
+function buildIndex(){
+  var df={},N=E.length+TF.length;
+  function add(set){Object.keys(set).forEach(function(t){df[t]=(df[t]||0)+1;});}
+  IDX=E.map(function(e){
+    var l=tokList(e.t+" "+e.k+" "+e.r), set={}; l.forEach(function(t){set[t]=1;});
+    var b={}; bigrams(tokList(e.k)).forEach(function(x){b[x]=1;});
+    var tt={}; tokList(e.t).forEach(function(t){tt[t]=1;});
+    add(set); return {e:e,set:set,bi:b,title:tt,n:Object.keys(set).length};
+  });
+  TFX=TF.map(function(f){
+    var vs=f.v.map(function(v){var l=uniq(tokList(v)),s={};l.forEach(function(t){s[t]=1;});return {txt:v,set:s,list:l};});
+    vs.forEach(function(v){add(v.set);}); return {f:f,vs:vs};
+  });
+  Object.keys(df).forEach(function(t){IDF[t]=Math.log(1+N/df[t]);});
+}
+function idf(t){return IDF[t]||Math.log(1+(E.length+TF.length)/0.5);}
+
+function rank(q){
+  if(!IDX) buildIndex();
+  var ql=tokList(q), qs=uniq(ql), qb={}; bigrams(ql).forEach(function(x){qb[x]=1;});
+  var res=IDX.map(function(x){
+    var s=0,hit=[]; qs.forEach(function(t){ if(x.set[t]){ s+=idf(t)*(x.title[t]?1.4:1); hit.push(t);} });
+    var bs=0; Object.keys(qb).forEach(function(b){ if(x.bi[b]) bs+=1; });
+    s+=bs*3.2;
+    s=s/Math.pow(1+x.n,0.06);
+    return {e:x.e,s:s,hit:hit};
+  }).filter(function(r){return r.s>0;}).sort(function(a,b){return b.s-a.s;});
+  return res;
+}
+var CONF=11, WEAK=7;
+/* ----- penalties ----- */
+function parsePen(t){
+  t=String(t||"").toLowerCase();
+  if(/disqualif|\bdq\b/.test(t)) return "dq";
+  if(/no penalty|without penalty|no stroke|not penalis|no breach/.test(t)) return 0;
+  if(/loss of (the )?hole|lose the hole|general penalty/.test(t)) return 2;
+  if(/\b(three|3)\b[^.]{0,20}stroke/.test(t)) return 3;
+  if(/\b(two|2)\b[^.]{0,20}stroke/.test(t)) return 2;
+  if(/\b(one|1|a)\b[^.]{0,20}(penalty )?stroke/.test(t)) return 1;
+  if(/\bone penalty\b/.test(t)) return 1;
+  return null;
+}
+function penCode(e,fmt){
+  if(e.p==="s") return fmt==="mp"?parsePen(e.mp):e.sn;
+  return e.p;
+}
+function penShort(e,fmt){
+  var c=penCode(e,fmt);
+  if(c===0) return "No penalty";
+  if(c===1) return "One penalty stroke";
+  if(c===2) return fmt==="mp"?"General penalty: loss of hole":"General penalty: two penalty strokes";
+  if(c==="dq") return "Disqualification";
+  return firstSentence(fmt==="mp"?e.mp:e.sp);
+}
+function firstSentence(s){var m=String(s).match(/^[^.]+\./);return m?m[0]:s;}
+function penFull(e,fmt){
+  if(e.p===0) return "No penalty.";
+  if(e.p===1) return "One penalty stroke"+(fmt==="mp"?" (added to the hole score).":".");
+  if(e.p===2) return fmt==="mp"?"General penalty: loss of hole.":"General penalty: two penalty strokes.";
+  if(e.p==="dq") return "Disqualification.";
+  return fmt==="mp"?e.mp:e.sp;
+}
+function codeText(c){return c===0?"No penalty":c===1?"One penalty stroke":c===2?"Two penalty strokes / loss of hole":c===3?"Three penalty strokes":c==="dq"?"Disqualification":"?";}
+
+/* ----- rule numbers and options ----- */
+var RULE_RE=/\b(\d{1,2}\.\d{1,2}[a-f]?(?:\(\d\))?)(?![\d])/g;
+function normRule(r){return String(r||"").toLowerCase().replace(/\(\d\)/g,"").replace(/\.$/,"");}
+function findRules(t){var m,out=[];RULE_RE.lastIndex=0;while((m=RULE_RE.exec(t))){out.push(m[1]);}return out;}
+function ruleMatches(opt,e){
+  var o=normRule(opt); if(!o) return false;
+  var all=[e.r].concat(e.alt||[]).map(normRule);
+  return all.some(function(r){return r===o;});
+}
+function ruleRelated(opt,e){
+  var o=normRule(opt),all=[e.r].concat(e.alt||[]).map(normRule);
+  return all.some(function(r){return r.indexOf(o)===0||o.indexOf(r)===0;});
+}
+function parseOptions(text){
+  var lines=String(text).split(/\n+/).map(function(l){return l.trim();}).filter(Boolean);
+  var opts=[],qlines=[];
+  lines.forEach(function(l,i){
+    var m=l.match(/^(?:[A-Ea-e][\).]\s+|[-•*]\s+)?(\d{1,2}\.\d{1,2}[a-f]?(?:\(\d\))?)\.?\s*(.*)$/);
+    var pen=parsePen(l);
+    var isOpt=false;
+    if(m) isOpt=true;
+    else if(i>0&&pen!==null&&l.length<110&&!/[?]$/.test(l)&&!/[.!]\s+[A-Z]/.test(l)) isOpt=true;
+    else if(/^[A-Ea-e][\).]\s+/.test(l)&&i>0) isOpt=true;
+    if(isOpt){opts.push({raw:l,rule:m?m[1]:(findRules(l)[0]||null),pen:pen,text:m?m[2]:l});}
+    else qlines.push(l);
+  });
+  /* single-line list of rule numbers after the question, e.g. "options: 4.3a, 10.2a, 10.3a" */
+  if(!opts.length){
+    var rs=findRules(text);
+    var u=uniq(rs.map(normRule));
+    if(u.length>=2){u.forEach(function(r){opts.push({raw:r,rule:r,pen:null,text:""});});}
+  }
+  return {question:qlines.join(" "),options:opts};
+}
+function detectFormat(t){
+  t=t.toLowerCase();
+  if(/match play|four-?ball match|\bhole is lost\b/.test(t)&&!/stroke play/.test(t)) return "mp";
+  return "sp";
+}
+function detectSection(text,opts){
+  var t=text.toLowerCase();
+  if(/true or false|true\/false|\btrue\b.*\bfalse\b/.test(t)) return "A";
+  var hasRule=opts.some(function(o){return o.rule;}), hasPen=opts.some(function(o){return o.pen!==null;});
+  var both=opts.some(function(o){return o.rule&&o.pen!==null;});
+  if(both) return "C";
+  if(hasRule&&!hasPen) return "D";
+  if(hasPen&&!hasRule) return "B";
+  if(/how many (strokes|penalty)|total (strokes|score)|calculate|what score|score for the hole/.test(t)) return "D";
+  if(/\?\s*$/.test(t.trim())||/\bwhat is the (ruling|penalty)\b/.test(t)) return "B";
+  if(/rule number/.test(t)) return "D";
+  return "A";
+}
+
+/* ===== True/False evaluation ===== */
+var NUMW={one:1,two:2,three:3,four:4,five:5,six:6,ten:10,"1":1,"2":2,"3":3,"4":4,"5":5,"6":6,"10":10,"14":14,"15":15};
+function nums(t){var o={};String(t).toLowerCase().split(/[^a-z0-9]+/).forEach(function(w){if(NUMW[w]!==undefined&&!/^(a)$/.test(w)) o[NUMW[w]]=1;});return Object.keys(o).sort().join(",");}
+function negCount(t){
+  t=String(t).toLowerCase();
+  var m=t.match(/\b(not|never|cannot|can't|no|none|neither|without|excludes?|isn't|aren't|doesn't|don't|does not|do not)\b/g);
+  return m?m.length:0;
+}
+function cosine(qset,vset,qlist){
+  var inter=0,sq=0,sv=0;
+  Object.keys(qset).forEach(function(t){sq+=idf(t)*idf(t);});
+  Object.keys(vset).forEach(function(t){sv+=idf(t)*idf(t);});
+  Object.keys(qset).forEach(function(t){if(vset[t]) inter+=idf(t)*idf(t);});
+  return sq&&sv?inter/Math.sqrt(sq*sv):0;
+}
+function evalTF(q){
+  if(!TFX) buildIndex();
+  var ql=uniq(tokList(q)),qs={};ql.forEach(function(t){qs[t]=1;});
+  var best=null;
+  TFX.forEach(function(x){
+    x.vs.forEach(function(v){
+      var s=cosine(qs,v.set);
+      if(!best||s>best.s) best={s:s,f:x.f,v:v};
+    });
+  });
+  return best;
+}
+
+/* ===== state and helpers ===== */
+var state={text:"",fmt:"auto",sec:"auto",shown:false};
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function ruleUrl(r){var n=String(r).match(/^\d{1,2}/);return n?"https://www.randa.org/rog/the-rules-of-golf/rule-"+n[0]:"https://www.randa.org/rog/definitions";}
+function ruleLink(r){return '<a class="rl" target="_blank" rel="noopener" href="'+ruleUrl(r)+'">Rule '+esc(r)+' on randa.org</a>';}
+var SECNAME={A:"Section A: True or False",B:"Section B: Multiple choice",C:"Section C: Ruling and Rule number",D:"Section D: Rule number and strokes"};
+var SAMPLES=[
+/* ---- A: True / False ---- */
+{lab:"GUR and a tree stump hole",sec:"A",t:"Ground under repair does not include a hole made in removing a tree stump."},
+{lab:"A stroke: backward and forward movement",sec:"A",t:"A stroke includes the backward and forward movement of the club made to strike the ball."},
+{lab:"Loose impediments in a bunker",sec:"A",t:"A player may remove loose impediments in a bunker before the stroke."},
+{lab:"Out of bounds: any part outside",sec:"A",t:"A ball is out of bounds if any part of it is outside the boundary edge."},
+{lab:"Lateral relief: red vs yellow",sec:"A",t:"Lateral relief is available from a red penalty area but not from a yellow penalty area."},
+{lab:"Match play: outside the teeing area",sec:"A",t:"In match play, playing from outside the teeing area costs the player the hole."},
+{lab:"Unplayable ball anywhere",sec:"A",t:"A player may declare a ball unplayable anywhere on the course except in a penalty area."},
+{lab:"Embedded ball in a bunker",sec:"A",t:"Free relief from an embedded ball is available in a bunker."},
+{lab:"Aeration holes",sec:"A",t:"Aeration holes are ground under repair."},
+{lab:"Giving the distance is advice",sec:"A",t:"Giving the distance to another player is advice."},
+{lab:"Two caddies",sec:"A",t:"A player may have two caddies at the same time."},
+{lab:"A practice swing is a stroke",sec:"A",t:"A practice swing is a stroke."},
+/* ---- B: Multiple choice ---- */
+{lab:"Loose impediment in a bunker moves the ball",sec:"B",t:"In stroke play, a player's ball lies in a bunker. The player removes a loose impediment, which lies behind their ball and the ball moves. The player replaces the ball and plays the next stroke. What is the ruling?\nThe player gets one penalty stroke\nThe player gets two penalty strokes\nThe player gets three penalty strokes"},
+{lab:"Ball hits a tree and returns to the teeing area",sec:"B",t:"In stroke play, a player plays from the teeing area and their ball hits a tree and comes back, coming to rest in the teeing area. The player picks up the ball, re-tees it and plays it. What is the ruling?\nThe player gets no penalty\nThe player gets one penalty stroke\nThe player gets two penalty strokes"},
+{lab:"Wrong ball played from the rough",sec:"B",t:"In stroke play, a player plays a wrong ball from the rough and does not realise. What is the penalty?\nThe player gets one penalty stroke\nThe player gets two penalty strokes\nThe player gets three penalty strokes"},
+{lab:"Practice swing touches the sand",sec:"B",t:"In stroke play, a player's ball lies in a bunker. During a practice swing the club touches the sand behind the ball. What is the ruling?\nThe player gets no penalty\nThe player gets one penalty stroke\nThe player gets two penalty strokes"},
+{lab:"Lifting a ball on the green without marking",sec:"B",t:"In stroke play, a player lifts their ball on the putting green without marking its spot. What is the ruling?\nThe player gets no penalty\nThe player gets one penalty stroke\nThe player gets two penalty strokes"},
+{lab:"Kicking the ball while searching",sec:"B",t:"In stroke play, a player accidentally kicks their ball while searching for it in the rough. What is the ruling?\nThe player gets no penalty\nThe player gets one penalty stroke\nThe player gets two penalty strokes"},
+{lab:"Wind moves a ball at rest",sec:"B",t:"In stroke play, a player's ball at rest in the fairway is moved by the wind. What is the ruling?\nThe player gets no penalty\nThe player gets one penalty stroke\nThe player gets two penalty strokes"},
+{lab:"Ball hits the flagstick",sec:"B",t:"In stroke play, a player's putt hits the flagstick that was left in the hole. What is the ruling?\nThe player gets no penalty\nThe player gets one penalty stroke\nThe player gets two penalty strokes"},
+/* ---- C: Ruling and Rule number ---- */
+{lab:"Lifted for another player, then removes the branch",sec:"C",t:"In stroke play, a player's ball lies in the general area against a loose tree branch. It appears likely that the ball will move if the player removes the tree branch. The player is asked to lift their ball by another player as it interferes with the other player's play. The player does this but, prior to replacing the ball, they remove the tree branch. What is the ruling?\n8.1a. No penalty.\n8.1a. One penalty stroke.\n8.1a. Two penalty strokes.\n9.4a. No penalty.\n9.4a. One penalty stroke.\n9.4a. Two penalty strokes.\n15.1a. No penalty.\n15.1a. One penalty stroke.\n15.1a. Two penalty strokes.\n7.3. No penalty.\n7.3. One penalty stroke.\n7.3. Two penalty strokes.\n14.1a. No penalty.\n14.1a. One penalty stroke.\n14.1a. Two penalty strokes."},
+{lab:"Asking another player which club they used",sec:"C",t:"In stroke play, a player asks a fellow competitor which club they used for their last shot. What is the ruling?\n10.2a. No penalty.\n10.2a. One penalty stroke.\n10.2a. Two penalty strokes.\n10.3a. No penalty.\n10.3a. One penalty stroke.\n10.3a. Two penalty strokes.\n4.3a. No penalty.\n4.3a. One penalty stroke.\n4.3a. Two penalty strokes."},
+{lab:"Ball overhanging the hole falls in later",sec:"C",t:"A player's ball overhangs the hole. After the player has waited a reasonable time to reach the hole and a further 10 seconds, the ball falls in. What is the ruling?\n13.3a. No penalty.\n13.3a. One penalty stroke.\n13.3a. Two penalty strokes.\n13.2c. No penalty.\n13.2c. One penalty stroke.\n13.2c. Two penalty strokes."},
+{lab:"Testing the putting green by rolling a ball",sec:"C",t:"In stroke play, during the hole a player rolls a ball across the putting green to test the surface. What is the ruling?\n13.1e. No penalty.\n13.1e. One penalty stroke.\n13.1e. Two penalty strokes.\n13.1c. No penalty.\n13.1c. One penalty stroke.\n13.1c. Two penalty strokes."},
+{lab:"Dropping the ball above knee height",sec:"C",t:"In stroke play, a player drops a ball for relief from shoulder height. It comes to rest in the relief area and the player plays it. What is the ruling?\n14.3b. No penalty.\n14.3b. One penalty stroke.\n14.3b. Two penalty strokes.\n14.3c. No penalty.\n14.3c. One penalty stroke.\n14.3c. Two penalty strokes."},
+{lab:"Practice swing accidentally moves the ball",sec:"C",t:"In stroke play, a player's ball lies in the general area. While taking a practice swing, the player's club accidentally touches the ball and the ball moves. What is the ruling?\n9.4b. No penalty.\n9.4b. One penalty stroke.\n9.4b. Two penalty strokes.\n9.3. No penalty.\n9.3. One penalty stroke.\n9.3. Two penalty strokes.\n7.4. No penalty.\n7.4. One penalty stroke.\n7.4. Two penalty strokes.\n8.1a. No penalty.\n8.1a. One penalty stroke.\n8.1a. Two penalty strokes.\n10.1a. No penalty.\n10.1a. One penalty stroke.\n10.1a. Two penalty strokes."},
+{lab:"Wrong ball played from the fairway",sec:"C",t:"In stroke play, a player plays a ball from the general area that proves not to be their ball. What is the ruling?\n6.3c. No penalty.\n6.3c. One penalty stroke.\n6.3c. Two penalty strokes.\n6.3b. No penalty.\n6.3b. One penalty stroke.\n6.3b. Two penalty strokes.\n6.2b. No penalty.\n6.2b. One penalty stroke.\n6.2b. Two penalty strokes.\n7.3. No penalty.\n7.3. One penalty stroke.\n7.3. Two penalty strokes.\n14.7a. No penalty.\n14.7a. One penalty stroke.\n14.7a. Two penalty strokes."},
+{lab:"Teeing off from in front of the tee-markers",sec:"C",t:"In stroke play, a player starts the hole by playing a stroke from outside the teeing area. What is the ruling?\n6.1b. No penalty.\n6.1b. One penalty stroke.\n6.1b. Two penalty strokes.\n6.2b. No penalty.\n6.2b. One penalty stroke.\n6.2b. Two penalty strokes.\n6.1c. No penalty.\n6.1c. One penalty stroke.\n6.1c. Two penalty strokes.\n14.7b. No penalty.\n14.7b. One penalty stroke.\n14.7b. Two penalty strokes.\n9.4b. No penalty.\n9.4b. One penalty stroke.\n9.4b. Two penalty strokes."},
+{lab:"Ball moved by the wind after it came to rest",sec:"C",t:"A player's ball at rest in the general area is moved by the wind before the player has played a stroke. What is the ruling?\n9.3. No penalty.\n9.3. One penalty stroke.\n9.3. Two penalty strokes.\n9.4b. No penalty.\n9.4b. One penalty stroke.\n9.4b. Two penalty strokes.\n7.4. No penalty.\n7.4. One penalty stroke.\n7.4. Two penalty strokes.\n9.2a. No penalty.\n9.2a. One penalty stroke.\n9.2a. Two penalty strokes.\n8.1a. No penalty.\n8.1a. One penalty stroke.\n8.1a. Two penalty strokes."},
+{lab:"Caddie standing behind on the line of play",sec:"C",t:"In stroke play, as a player begins taking a stance to play a stroke, the player's caddie deliberately stands on an extension of the line of play behind the ball. The player then plays the stroke. What is the ruling?\n10.2b. No penalty.\n10.2b. One penalty stroke.\n10.2b. Two penalty strokes.\n10.2a. No penalty.\n10.2a. One penalty stroke.\n10.2a. Two penalty strokes.\n10.3b. No penalty.\n10.3b. One penalty stroke.\n10.3b. Two penalty strokes.\n10.1b. No penalty.\n10.1b. One penalty stroke.\n10.1b. Two penalty strokes.\n4.3a. No penalty.\n4.3a. One penalty stroke.\n4.3a. Two penalty strokes."},
+{lab:"Player's ball marker accidentally moved on the green",sec:"C",t:"On the putting green, a player accidentally moves their own ball-marker while repairing a ball-mark. What is the ruling?\n13.1d. No penalty.\n13.1d. One penalty stroke.\n13.1d. Two penalty strokes.\n13.1c. No penalty.\n13.1c. One penalty stroke.\n13.1c. Two penalty strokes.\n9.5. No penalty.\n9.5. One penalty stroke.\n9.5. Two penalty strokes.\n14.2. No penalty.\n14.2. One penalty stroke.\n14.2. Two penalty strokes.\n9.4b. No penalty.\n9.4b. One penalty stroke.\n9.4b. Two penalty strokes."},
+{lab:"Arriving three minutes late to the tee",sec:"C",t:"In stroke play, a player arrives at the teeing area three minutes after their starting time and is ready to play. What is the ruling?\n5.3a. No penalty.\n5.3a. One penalty stroke.\n5.3a. Two penalty strokes.\n5.3b. No penalty.\n5.3b. One penalty stroke.\n5.3b. Two penalty strokes.\n5.6a. No penalty.\n5.6a. One penalty stroke.\n5.6a. Two penalty strokes.\n5.2a. No penalty.\n5.2a. One penalty stroke.\n5.2a. Two penalty strokes.\n6.1b. No penalty.\n6.1b. One penalty stroke.\n6.1b. Two penalty strokes."},
+{lab:"Ball hits the player's own caddie by accident",sec:"C",t:"In stroke play, a player's ball in motion after a stroke accidentally hits the player's caddie. What is the ruling?\n11.1a. No penalty.\n11.1a. One penalty stroke.\n11.1a. Two penalty strokes.\n11.2a. No penalty.\n11.2a. One penalty stroke.\n11.2a. Two penalty strokes.\n11.2b. No penalty.\n11.2b. One penalty stroke.\n11.2b. Two penalty strokes.\n10.2b. No penalty.\n10.2b. One penalty stroke.\n10.2b. Two penalty strokes.\n9.5. No penalty.\n9.5. One penalty stroke.\n9.5. Two penalty strokes."},
+/* ---- D: Rule number and strokes ---- */
+{lab:"Asking the length of the hole",sec:"D",t:"Grant does not have a yardage book. So he asks Shona, who was carrying a yardage book, what the length of the hole is. Shona advises Grant that it is 380 yards. What is the Rule number?\n4.3a\n10.2a\n10.3a\n24.4a\n1.3a"},
+{lab:"Tee shot out of bounds",sec:"D",t:"In stroke play, Mia's tee shot is out of bounds. She plays again from the teeing area. What is the Rule number and how many penalty strokes?"},
+{lab:"Caddie stands behind while lining up",sec:"D",t:"In stroke play, a caddie stood behind the player on the line of play while the player began the stance. What is the Rule number and how many penalty strokes?"},
+{lab:"Unplayable ball, lateral relief",sec:"D",t:"In stroke play, a player declares their ball unplayable in the general area and drops within two club-lengths of where it lay. What is the Rule number and how many penalty strokes?"},
+{lab:"Red penalty area, lateral relief",sec:"D",t:"In stroke play, a player's ball is in a red penalty area. The player takes lateral relief within two club-lengths. What is the Rule number and how many penalty strokes?"},
+{lab:"Carrying 15 clubs",sec:"D",t:"In stroke play, a player finds a 15th club in the bag on the second hole and had it since the first tee. What is the Rule number and how many penalty strokes?"},
+{lab:"Late to the first tee",sec:"D",t:"In stroke play, a player arrives at the first tee 3 minutes after the starting time, ready to play. What is the Rule number and how many penalty strokes?"},
+{lab:"Using a rangefinder to measure slope",sec:"D",t:"In stroke play, a player uses a rangefinder to measure the slope of the green. What is the Rule number and how many penalty strokes?"},
+{lab:"Playing from outside the relief area",sec:"D",t:"In stroke play, a player takes relief but plays the ball from outside the relief area. What is the Rule number and how many penalty strokes?"}
+];
+
+/* ===== rendering ===== */
+function analyse(){
+  var text=state.text.trim();
+  var po=parseOptions(text);
+  var sec=state.sec==="auto"?detectSection(text,po.options):state.sec;
+  var fmt=state.fmt==="auto"?detectFormat(text):state.fmt;
+  var qtext=po.question||text;
+  var res=rank(qtext), best=res[0]||null;
+  if(best&&best.s<WEAK) best=null;
+  return {text:text,po:po,sec:sec,fmt:fmt,q:qtext,res:res,best:best,auto:state.sec==="auto"};
+}
+function confLabel(s,res){
+  var marg=res[1]?s-res[1].s:s;
+  if(s>=CONF*1.6&&marg>=1.5) return ["high","High match"];
+  if(s>=CONF) return ["med","Good match"];
+  return ["low","Weak match"];
+}
+function optCheck(po,best,fmt){
+  if(!po.options.length||!best) return "";
+  var e=best.e,code=penCode(e,fmt);
+  var rows=po.options.map(function(o){
+    var rm=o.rule?ruleMatches(o.rule,e):null, rr=o.rule&&!rm?ruleRelated(o.rule,e):false;
+    var pc=o.pen, pm=pc!==null?(pc===code||(pc===2&&code===2)):null;
+    var ok,why;
+    if(o.rule&&pc!==null){ok=rm&&pm; why=ok?"Matches the ruling and the Rule.":(!rm?("Rule "+o.rule+" covers: "+(CL[normRule(o.rule)]||CL[o.rule.replace(/[a-f].*/,"")]||"another situation")+"."):"Rule fits, but the penalty is not "+codeText(pc).toLowerCase()+".");}
+    else if(o.rule){ok=rm; why=rm?"Best Rule for this situation.":"Rule "+o.rule+" covers: "+(CL[normRule(o.rule)]||CL[o.rule.replace(/[a-f].*/,"")]||"another situation")+"."+(rr?" It is related but not the best fit.":"");}
+    else {ok=pm; why=pm?"Matches the ruling.":"Does not match the ruling.";}
+    return {o:o,ok:!!ok,why:why};
+  });
+  var h='<div class="card"><h3>Your options checked</h3><div class="opts">';
+  rows.forEach(function(r){
+    h+='<div class="opt '+(r.ok?"yes":"no")+'"><span class="mk">'+(r.ok?"&#10003;":"&#10005;")+'</span><div><strong>'+esc(r.o.raw)+'</strong><div class="why">'+esc(r.why)+'</div></div></div>';
+  });
+  return h+'</div></div>';
+}
+function altList(res,best,fmt){
+  var rest=res.filter(function(r){return r!==best&&r.s>=WEAK;}).slice(0,3);
+  if(!rest.length) return "";
+  var h='<div class="card"><h3>Other rules that could apply</h3><div class="alts">';
+  rest.forEach(function(r){h+='<div class="alt"><strong>Rule '+esc(r.e.r)+'</strong> '+esc(r.e.t)+'<div class="why">'+esc(penShort(r.e,fmt))+'</div></div>';});
+  return h+'</div></div>';
+}
+function scenarios(res,best,fmt){
+  var h='<div class="card"><h3>What could change the answer</h3><ul class="sc">';
+  best.e.s.forEach(function(s){h+='<li>'+esc(s)+'</li>';});
+  var others=res.filter(function(r){return r!==best&&r.s>=WEAK;}).slice(0,2);
+  others.forEach(function(r){h+='<li><strong>If it is really about '+esc(r.e.t.toLowerCase())+'</strong> (Rule '+esc(r.e.r)+'): '+esc(penShort(r.e,fmt))+'.</li>';});
+  if(!best.e.s.length&&!others.length) h+='<li>Check the format (stroke play or match play) and where the ball lies.</li>';
+  return h+'</ul></div>';
+}
+function strokeCalc(best,fmt){
+  var e=best.e,code=penCode(e,fmt),isNum=typeof code==="number";
+  var h='<div class="card"><h3>Stroke calculator</h3><p class="why">'+esc(e.calc||"")+'</p>';
+  h+='<div class="calc"><label>Strokes played before the breach<input id="cb" type="number" min="0" value="" inputmode="numeric" placeholder="0"></label>';
+  h+='<label>Strokes played after<input id="ca" type="number" min="0" value="" inputmode="numeric" placeholder="0"></label></div>';
+  h+='<div id="cout" class="cout" data-pen="'+(isNum?code:"")+'" data-dq="'+(code==="dq"?1:0)+'"></div></div>';
+  return h;
+}
+function topCard(a){
+  var b=a.best,e=b.e,cl=confLabel(b.s,a.res),h="";
+  h+='<div class="card main"><div class="row"><span class="badge sec">'+esc(SECNAME[a.sec])+(a.auto?" (auto)":"")+'</span><span class="badge '+cl[0]+'">'+cl[1]+'</span><span class="badge fmt">'+(a.fmt==="mp"?"Match play":"Stroke play")+'</span></div>';
+  return h;
+}
+function answerLine(a){
+  var e=a.best.e,fmt=a.fmt;
+  if(a.sec==="B") return '<div class="ans">'+esc(penShort(e,fmt))+'</div><div class="sub">Rule '+esc(e.r)+(e.alt&&e.alt.length?" (also "+esc(e.alt.slice(0,2).join(", "))+")":"")+'</div>';
+  if(a.sec==="C") return '<div class="ans">'+esc(e.r)+'. '+esc(penShort(e,fmt))+'</div><div class="sub">'+esc(e.t)+'</div>';
+  if(a.sec==="D"){var c=penCode(e,fmt);var n=typeof c==="number"?(c+" penalty stroke"+(c===1?"":"s")):(c==="dq"?"Disqualification":penShort(e,fmt));
+    return '<div class="ans">Rule '+esc(e.r)+'. '+esc(n)+'</div><div class="sub">'+esc(e.t)+'</div>';}
+  return '<div class="ans">'+esc(penShort(e,fmt))+'</div><div class="sub">Rule '+esc(e.r)+'</div>';
+}
+function reasonBlock(a){
+  var e=a.best.e,fmt=a.fmt;
+  return '<div class="what"><strong>Ruling.</strong> '+esc(e.a)+'</div>'+
+   '<div class="what"><strong>Penalty ('+(fmt==="mp"?"match play":"stroke play")+').</strong> '+esc(penFull(e,fmt))+'</div>'+
+   (e.w?'<div class="what"><strong>Why.</strong> '+esc(e.w)+'</div>':'')+
+   '<div class="what"><strong>Next step.</strong> '+esc(e.n)+'</div>'+
+   '<div class="row">'+ruleLink(e.r)+'</div></div>';
+}
+function fallback(a,why){
+  var q=a.q;
+  var web="https://www.google.com/search?q="+encodeURIComponent("Rules of Golf 2023 "+q);
+  var site="https://www.google.com/search?q="+encodeURIComponent("site:randa.org "+q);
+  var h='<div class="card fb"><h2>No confident match</h2><p>'+esc(why||"This tool has no stored answer that fits closely.")+' These routes can still get you an answer:</p><div class="row">'+
+   '<a class="btn" target="_blank" rel="noopener" href="https://www.randa.org/players-rule-finder">R&amp;A Player\'s Rule Finder</a>'+
+   '<a class="btn" target="_blank" rel="noopener" href="'+site+'">Search randa.org</a>'+
+   '<a class="btn" target="_blank" rel="noopener" href="'+web+'">Search the web</a>'+
+   '<button class="btn ghost" id="copyq">Copy question</button></div>';
+  var near=a.res.slice(0,3);
+  if(near.length){h+='<h3>Closest topics in this tool</h3><div class="alts">';near.forEach(function(r){h+='<div class="alt"><strong>Rule '+esc(r.e.r)+'</strong> '+esc(r.e.t)+'<div class="why">'+esc(r.e.a)+'</div></div>';});h+='</div>';}
+  var terms=defHits(q);
+  if(terms.length){h+='<h3>Related definitions</h3><div class="alts">';terms.forEach(function(d){h+='<div class="alt"><strong>'+esc(d[0])+'</strong> ('+esc(d[2])+')<div class="why">'+esc(d[1])+'</div></div>';});h+='</div>';}
+  h+='<p class="why">Try adding where the ball is (tee, bunker, green, penalty area), who did what, and whether it is stroke play or match play.</p></div>';
+  return h;
+}
+function defHits(q){
+  var ql=uniq(tokList(q)),out=[];
+  DEFS.forEach(function(d){var dl=uniq(tokList(d[0])),hit=dl.filter(function(t){return ql.indexOf(t)>-1;});if(hit.length&&hit.length>=Math.min(2,dl.length)) out.push([hit.length,d]);});
+  return out.sort(function(a,b){return b[0]-a[0];}).slice(0,3).map(function(x){return x[1];});
+}
+function renderA(a){
+  var tf=evalTF(a.q), h="", e=a.best?a.best.e:null;
+  var verdict=null,expl="",rule="",conf="low",note="";
+  var near=null;
+  if(tf&&tf.s>=0.55){
+    var f=tf.f,v=tf.v,val=f.a;
+    var nd=nums(a.q)!==nums(v.txt), ng=(negCount(a.q)%2)!==(negCount(v.txt)%2);
+    if(tf.s>=0.82&&!nd&&!ng){verdict=val;conf=tf.s>=0.93?"high":"med";}
+    else if(tf.s>=0.82&&ng&&!nd){verdict=!val;note="Your wording is the negative of a stored fact, so the answer is the opposite. ";conf="med";}
+    else if(tf.s>=0.65&&nd&&val===true&&!ng){verdict=false;note="A number in your statement differs from the stored fact. ";conf="med";}
+    if(verdict!==null){expl=f.why;rule=f.r;note+="Matched fact: "+v.txt;}
+    else {near={txt:v.txt,a:val,why:f.why,r:f.r};}
+  }
+  if(verdict===null&&e&&a.best){
+    /* try rule answer text similarity */
+    var qs={},al=uniq(tokList(a.q));al.forEach(function(t){qs[t]=1;});
+    var es={};uniq(tokList(e.a)).forEach(function(t){es[t]=1;});
+    var s2=cosine(qs,es);
+    if(s2>=0.6&&negCount(a.q)%2===negCount(e.a)%2){verdict=true;expl=e.a;rule=e.r;conf="low";note="Closely matches the stored ruling for this topic.";}
+  }
+  if(verdict===null){
+    if(!a.best) return fallback(a);
+    h+='<div class="card main"><div class="row"><span class="badge sec">'+SECNAME.A+(a.auto?" (auto)":"")+'</span><span class="badge low">No direct match</span></div>'+
+      '<div class="ans small">Cannot call True or False from a stored fact</div><div class="sub">The closest topic is below. Decide whether your statement agrees with it.</div>'+(near?'<div class="what"><strong>Related fact:</strong> &ldquo;'+esc(near.txt)+'&rdquo; is <strong>'+(near.a?"TRUE":"FALSE")+'</strong>. '+esc(near.why)+'</div>':'')+reasonBlock(a)+
+      '<div class="card"><h3>How to decide</h3><ul class="sc"><li>Check for a flipped detail: number of strokes (one or two), one or two club-lengths, 3 minutes, penalty or no penalty.</li><li>Words like always, never, only and does not include are where True/False questions are often tested.</li><li>Check the area of the course (bunker, penalty area, putting green) in the statement.</li></ul></div>';
+    return h+altList(a.res,a.best,a.fmt);
+  }
+  h+='<div class="card main"><div class="row"><span class="badge sec">'+SECNAME.A+(a.auto?" (auto)":"")+'</span><span class="badge '+conf+'">'+(conf==="high"?"High match":conf==="med"?"Good match":"Weak match")+'</span></div>';
+  h+='<div class="tf '+(verdict?"t":"f")+'">'+(verdict?"TRUE":"FALSE")+'</div>';
+  h+='<div class="what"><strong>Why.</strong> '+esc(expl)+'</div>';
+  if(note) h+='<div class="what why">'+esc(note)+'</div>';
+  h+='<div class="row">'+ruleLink(rule)+'</div></div>';
+  var d=defHits(a.q); if(d.length){h+='<div class="card"><h3>Definition check</h3><div class="alts">';d.forEach(function(x){h+='<div class="alt"><strong>'+esc(x[0])+'</strong> ('+esc(x[2])+')<div class="why">'+esc(x[1])+'</div></div>';});h+='</div></div>';}
+  return h;
+}
+function render(){
+  var out=document.getElementById("out");
+  if(!state.shown){out.innerHTML="";return;}
+  if(!state.text.trim()){out.innerHTML='<div class="card"><p>Type or paste a question first.</p></div>';return;}
+  var a=analyse(), h="";
+  if(a.sec==="A"){h=renderA(a);}
+  else if(!a.best){h=fallback(a);}
+  else{
+    h=topCard(a)+answerLine(a)+reasonBlock(a);
+    h+=optCheck(a.po,a.best,a.fmt);
+    if(a.sec==="D") h+=strokeCalc(a.best,a.fmt);
+    h+=scenarios(a.res,a.best,a.fmt);
+    h+=altList(a.res,a.best,a.fmt);
+  }
+  out.innerHTML=h;
+  var cb=document.getElementById("cb");if(cb) calcUpdate();
+  out.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function calcUpdate(){
+  var o=document.getElementById("cout");if(!o) return;
+  var pen=o.dataset.pen,dq=o.dataset.dq==="1";
+  var b=parseInt(document.getElementById("cb").value||0,10)||0,af=parseInt(document.getElementById("ca").value||0,10)||0;
+  if(dq){o.innerHTML="Disqualification: no score is returned for the round.";return;}
+  if(pen===""){o.innerHTML="This depends on the format. See the penalty line above (match play: loss of hole).";return;}
+  var p=parseInt(pen,10),tot=b+p+af;
+  o.innerHTML="<strong>Hole score so far: "+tot+"</strong><br>"+b+" strokes before + "+p+" penalty stroke"+(p===1?"":"s")+" + "+af+" after. The next stroke is stroke number "+(b+af+1)+" (penalty strokes are not strokes played).";
+}
+/* ===== init ===== */
+function init(){
+  var sam=document.getElementById("samples");
+  var G={A:"A. True or False",B:"B. Multiple choice",C:"C. Ruling and Rule number",D:"D. Rule number and strokes"},h="";
+  ["A","B","C","D"].forEach(function(k){
+    h+='<details class="grp"'+(k==="A"?" open":"")+'><summary>'+G[k]+'</summary><div class="chips">';
+    SAMPLES.forEach(function(s,i){if(s.sec===k) h+='<button class="chip" data-s="'+i+'">'+esc(s.lab)+'</button>';});
+    h+='</div></details>';
+  });
+  sam.innerHTML=h;
+  document.addEventListener("click",function(ev){
+    var b=ev.target.closest("button");if(!b) return;
+    if(b.dataset.s!==undefined){var s=SAMPLES[+b.dataset.s];document.getElementById("q").value=s.t;state.text=s.t;state.sec="auto";setTabs();state.shown=true;render();return;}
+    if(b.dataset.sec){state.sec=b.dataset.sec;setTabs();if(state.shown) render();return;}
+    if(b.dataset.fmt){state.fmt=b.dataset.fmt;setTabs();if(state.shown) render();return;}
+    if(b.id==="go"){state.text=document.getElementById("q").value;state.shown=true;render();return;}
+    if(b.id==="clr"){document.getElementById("q").value="";state.text="";state.shown=false;render();return;}
+    if(b.id==="copyq"){var t=state.text;try{navigator.clipboard.writeText(t);b.textContent="Copied";}catch(e){b.textContent="Copy not available";}return;}
+  });
+  document.getElementById("q").addEventListener("keydown",function(e){if((e.ctrlKey||e.metaKey)&&e.key==="Enter"){state.text=this.value;state.shown=true;render();}});
+  document.addEventListener("input",function(e){if(e.target.id==="cb"||e.target.id==="ca") calcUpdate();});
+  setTabs();
+}
+function setTabs(){
+  document.querySelectorAll("[data-sec]").forEach(function(b){b.classList.toggle("on",b.dataset.sec===state.sec);});
+  document.querySelectorAll("[data-fmt]").forEach(function(b){b.classList.toggle("on",b.dataset.fmt===state.fmt);});
+}
+
+
+init();
+
+</script>
+<script>if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+</body>
+</html>
